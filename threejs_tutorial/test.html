@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - glTF loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+
+	<body>
+		<div id="info">
+			<a>Hello, World!</a>
+		</div>
+
+		<script type="module">
+
+			import * as THREE from './three.module.js';
+
+			import { OrbitControls } from './OrbitControls.js';
+			import { GLTFLoader } from './GLTFLoader.js';
+
+			let camera, scene, renderer;
+
+			init();
+			render();
+
+			function init() {
+
+				const container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
+				camera.position.set( 0, 0, 2.7 );
+
+				scene = new THREE.Scene();
+
+                const ambient = new THREE.AmbientLight(0x666666);
+                scene.add(ambient);
+
+                const light = new THREE.DirectionalLight(0xffffff, 2);
+                light.position.set(50, 50, 100);
+                scene.add(light);
+                
+                const axesHelper = new THREE.AxesHelper(1);
+                scene.add(axesHelper);
+
+                const loader = new GLTFLoader().setPath( './house/' );
+                loader.load( 'scene2.glb', function ( gltf ) {
+
+                    gltf.scene.traverse( function ( child ) {
+
+                        if ( child.isMesh ) {
+
+                            // TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
+                            // roughnessMipmapper.generateMipmaps( child.material );
+
+                        }
+
+                    } );
+
+                    scene.add( gltf.scene );
+
+                    render();
+                });
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				// renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				// renderer.toneMappingExposure = 1;
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				container.appendChild( renderer.domElement );
+
+				const controls = new OrbitControls( camera, renderer.domElement );
+				controls.addEventListener( 'change', render ); // use if there is no animation loop
+				controls.minDistance = 0.1;
+				controls.maxDistance = 10;
+				controls.target.set( 0, 0, 0 );
+				controls.update();
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				render();
+
+			}
+
+			//
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>
