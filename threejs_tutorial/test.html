@@ -16,10 +16,16 @@
 
 			import * as THREE from './three.module.js';
 
+            import { GUI } from './dat.gui.module.js';
+
 			import { OrbitControls } from './OrbitControls.js';
 			import { GLTFLoader } from './GLTFLoader.js';
+            import { RGBELoader } from './RGBELoader.js';
 
 			let camera, scene, renderer;
+            let gui;
+
+            const state = { variant: 'midnight' };
 
 			init();
 			render();
@@ -33,6 +39,7 @@
 				camera.position.set( 0, 0, 2.7 );
 
 				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xffffff );
 
                 const ambient = new THREE.AmbientLight(0x666666);
                 scene.add(ambient);
@@ -47,18 +54,30 @@
                 const loader = new GLTFLoader().setPath( './house/' );
                 loader.load( 'scene2.glb', function ( gltf ) {
 
-                    gltf.scene.traverse( function ( child ) {
+                    // gltf.scene.traverse( function ( child ) {
 
-                        if ( child.isMesh ) {
 
-                            // TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
-                            // roughnessMipmapper.generateMipmaps( child.material );
+                    //     if ( child.isMesh ) {
 
-                        }
+                    //         // TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
+                    //         // roughnessMipmapper.generateMipmaps( child.material );
 
-                    } );
+                    //     }
+
+                    // } );
 
                     scene.add( gltf.scene );
+                    
+                    gui = new GUI();
+
+                    // const parser = gltf.parser;
+                    // const variantsExtension = gltf.userData.gltfExtensions[ 'KHR_materials_variants' ];
+                    // const variants = variantsExtension.variants.map( (variant) => variant.name );
+                    // const variantsCtrl = gui.add( state, 'variant', variants ).name( 'Variants');
+
+                    // selectVariant( scene, parser, variantsExtension, state.variant );
+
+                    // variantsCtrl.onChange( (value) => selectVariant( scene, parser, variantsExtension, value));
 
                     render();
                 });
@@ -71,6 +90,10 @@
 				renderer.outputEncoding = THREE.sRGBEncoding;
 				container.appendChild( renderer.domElement );
 
+                
+                const pmremGenerator = new THREE.PMREMGenerator( renderer );
+                pmremGenerator.compileEquirectangularShader();
+
 				const controls = new OrbitControls( camera, renderer.domElement );
 				controls.addEventListener( 'change', render ); // use if there is no animation loop
 				controls.minDistance = 0.1;
@@ -81,6 +104,43 @@
 				window.addEventListener( 'resize', onWindowResize );
 
 			}
+
+            function selectVariant( scene, parser, extension, variantName ){
+
+                const variantIndex = extension.variants.findeIndex( ( v ) => v.name.includes( variantNmae ) );
+
+                scene.traverse( async(object)=>{
+
+                    if ( ! object.isMesh || ! object.userData.gltfExtensions ) return;
+
+					const meshVariantDef = object.userData.gltfExtensions[ 'KHR_materials_variants' ];
+
+					if ( ! meshVariantDef ) return;
+
+					if ( ! object.userData.originalMaterial ) {
+
+						object.userData.originalMaterial = object.material;
+
+					}
+
+					const mapping = meshVariantDef.mappings
+						.find( ( mapping ) => mapping.variants.includes( variantIndex ) );
+
+					if ( mapping ) {
+
+						object.material = await parser.getDependency( 'material', mapping.material );
+						parser.assignFinalMaterial(object);
+
+					} else {
+
+						object.material = object.userData.originalMaterial;
+
+					}
+
+                    render();
+                })
+
+            }
 
 			function onWindowResize() {
 
@@ -100,6 +160,7 @@
 				renderer.render( scene, camera );
 
 			}
+
 
 		</script>
 
