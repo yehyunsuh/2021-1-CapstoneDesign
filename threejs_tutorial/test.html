@@ -12,7 +12,7 @@
 		<button style="background-color: #FF2D00;" id="color_1" onclick="changeColor('#FF2D00')"></button>
 		<button style="background-color: #E8FF00;" id="color_2" onclick="changeColor('#E8FF00')"></button>
 		<button style="background-color: #18FF00;" id="color_3" onclick="changeColor('#18FF00')"></button>
-		<button style="position:fixed; top: 90%; left: 45%; width: 10%; height: 5%; border: 1px solid rgba(0, 0, 0, .2);">ACTION</button>
+		<button style="position:fixed; top: 90%; left: 45%; width: 10%; height: 5%; border: 1px solid rgba(0, 0, 0, .2);" id="action">ACTION</button>
 
 		<script type="module">
 
@@ -25,6 +25,7 @@
             import { RGBELoader } from './RGBELoader.js';
 
 			let camera, scene, renderer;
+			let base;
             // let gui;
 
 			init();
@@ -45,7 +46,7 @@
                 const ambient = new THREE.AmbientLight(0x555555);
                 scene.add(ambient);
 
-                const light = new THREE.DirectionalLight(0xE8FF00, 2);
+                const light = new THREE.DirectionalLight(0xffffff, 2);
                 light.position.set(50, 50, 100);
                 scene.add(light);
                 
@@ -54,6 +55,7 @@
 
                 const loader = new GLTFLoader().setPath( './house/' );
                 loader.load( 'scene2.glb', function ( gltf ) {
+					base = gltf.scene;
 
                     // gltf.scene.traverse( function ( child ) {
 
@@ -67,7 +69,7 @@
 
                     // } );
 
-                    scene.add( gltf.scene );
+                    scene.add( base );
                 });
 				
 
@@ -93,6 +95,14 @@
 
 				window.addEventListener( 'resize', onWindowResize );
 
+				document.getElementById('action').onclick = (ev) =>{
+					scene.remove( base );
+
+					loader.load('Parrot.glb', function(gltf){
+						scene.add(gltf.scene);
+					});
+				}
+
 			}
 
 			function onWindowResize() {
@@ -113,11 +123,6 @@
 				renderer.render( scene, camera );
 
 			}
-
-			function changeColor(color){
-				light.color(color, 2);
-			}
-
 
 		</script>
 
