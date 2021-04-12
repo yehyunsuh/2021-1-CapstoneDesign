@@ -82,3 +82,30 @@ a, button, input, select {
 	margin-top: 20px;
 	padding: 10px;
 }
+
+#color_1{
+	position: fixed;
+	top: 95%;
+	left: 43%;
+	width: 5%;
+	height: 5%;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
+
+#color_2{
+	position: fixed;
+	top: 95%;
+	left: 48%;
+	width: 5%;
+	height: 5%;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
+
+#color_3{
+	position: fixed;
+	top: 95%;
+	left: 53%;
+	width: 5%;
+	height: 5%;
+	border: 1px solid rgba(0, 0, 0, .2);
+}

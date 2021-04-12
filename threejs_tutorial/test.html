@@ -8,27 +8,28 @@
 	</head>
 
 	<body>
-		<div id="info">
-			<a>Hello, World!</a>
-		</div>
+
+		<button style="background-color: #FF2D00;" id="color_1" onclick="changeColor('#FF2D00')"></button>
+		<button style="background-color: #E8FF00;" id="color_2" onclick="changeColor('#E8FF00')"></button>
+		<button style="background-color: #18FF00;" id="color_3" onclick="changeColor('#18FF00')"></button>
+		<button style="position:fixed; top: 90%; left: 45%; width: 10%; height: 5%; border: 1px solid rgba(0, 0, 0, .2);">ACTION</button>
 
 		<script type="module">
 
 			import * as THREE from './three.module.js';
 
-            import { GUI } from './dat.gui.module.js';
+            // import { GUI } from './dat.gui.module.js';
 
 			import { OrbitControls } from './OrbitControls.js';
 			import { GLTFLoader } from './GLTFLoader.js';
             import { RGBELoader } from './RGBELoader.js';
 
 			let camera, scene, renderer;
-            let gui;
-
-            // const state = { variant: 'midnight' };
+            // let gui;
 
 			init();
 			render();
+
 
 			function init() {
 
@@ -41,10 +42,10 @@
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xffffff );
 
-                const ambient = new THREE.AmbientLight(0x666666);
+                const ambient = new THREE.AmbientLight(0x555555);
                 scene.add(ambient);
 
-                const light = new THREE.DirectionalLight(0xffffff, 2);
+                const light = new THREE.DirectionalLight(0xE8FF00, 2);
                 light.position.set(50, 50, 100);
                 scene.add(light);
                 
@@ -67,24 +68,9 @@
                     // } );
 
                     scene.add( gltf.scene );
-                    
-                    gui = new GUI();
-					
-					const colorFolder = gui.addFolder("Color");
-
-					const sizeFolder = gui.addFolder("Size");
-
-                    // const parser = gltf.parser;
-                    // const variantsExtension = gltf.userData.gltfExtensions[ 'KHR_materials_variants' ];
-                    // const variants = variantsExtension.variants.map( (variant) => variant.name );
-                    // const variantsCtrl = gui.add( state, 'variant', variants ).name( 'Variants');
-
-                    // selectVariant( scene, parser, variantsExtension, state.variant );
-
-                    // variantsCtrl.onChange( (value) => selectVariant( scene, parser, variantsExtension, value));
-
-                    render();
                 });
+				
+
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -109,43 +95,6 @@
 
 			}
 
-            function selectVariant( scene, parser, extension, variantName ){
-
-                const variantIndex = extension.variants.findeIndex( ( v ) => v.name.includes( variantNmae ) );
-
-                scene.traverse( async(object)=>{
-
-                    if ( ! object.isMesh || ! object.userData.gltfExtensions ) return;
-
-					const meshVariantDef = object.userData.gltfExtensions[ 'KHR_materials_variants' ];
-
-					if ( ! meshVariantDef ) return;
-
-					if ( ! object.userData.originalMaterial ) {
-
-						object.userData.originalMaterial = object.material;
-
-					}
-
-					const mapping = meshVariantDef.mappings
-						.find( ( mapping ) => mapping.variants.includes( variantIndex ) );
-
-					if ( mapping ) {
-
-						object.material = await parser.getDependency( 'material', mapping.material );
-						parser.assignFinalMaterial(object);
-
-					} else {
-
-						object.material = object.userData.originalMaterial;
-
-					}
-
-                    render();
-                })
-
-            }
-
 			function onWindowResize() {
 
 				camera.aspect = window.innerWidth / window.innerHeight;
@@ -163,6 +112,10 @@
 
 				renderer.render( scene, camera );
 
+			}
+
+			function changeColor(color){
+				light.color(color, 2);
 			}
 
 
