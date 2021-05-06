@@ -1,3 +1,9 @@
 {
-    "liveServer.settings.port": 5580
+    "liveServer.settings.https": {
+    "enable": true, //set it true to enable the feature.
+    "cert": "/Users/jhs1v/OneDrive/바탕 화면/캡디/코드/CapstoneDesign2021/threejs_tutorial/serverpem/localhost.crt", //full path of the certificate
+    "key": "/Users/jhs1v/OneDrive/바탕 화면/캡디/코드/CapstoneDesign2021/threejs_tutorial/serverpem/localhost.key", //full path of the private key
+    "passphrase": "123123"
+    },
+    "liveServer.settings.port": 5579
 }
