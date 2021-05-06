@@ -8,29 +8,28 @@
 	</head>
 
 	<body>
-
-		<button style="background-color: #FF2D00;" id="color_1" onclick="changeColor('#FF2D00')"></button>
-		<button style="background-color: #E8FF00;" id="color_2" onclick="changeColor('#E8FF00')"></button>
-		<button style="background-color: #18FF00;" id="color_3" onclick="changeColor('#18FF00')"></button>
-		<button style="position:fixed; top: 90%; left: 45%; width: 10%; height: 5%; border: 1px solid rgba(0, 0, 0, .2);" id="action">ACTION</button>
+		<div id="info">
+			<a>Hello, World!</a>
+		</div>
 
 		<script type="module">
 
 			import * as THREE from './three.module.js';
 
-            // import { GUI } from './dat.gui.module.js';
+            import { GUI } from './dat.gui.module.js';
 
 			import { OrbitControls } from './OrbitControls.js';
 			import { GLTFLoader } from './GLTFLoader.js';
             import { RGBELoader } from './RGBELoader.js';
+			import { ARButton } from './ARButton.js';
 
 			let camera, scene, renderer;
-			let base;
-            // let gui;
+            let gui;
+
+            // const state = { variant: 'midnight' };
 
 			init();
 			render();
-
 
 			function init() {
 
@@ -43,7 +42,7 @@
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xffffff );
 
-                const ambient = new THREE.AmbientLight(0x555555);
+                const ambient = new THREE.AmbientLight(0x666666);
                 scene.add(ambient);
 
                 const light = new THREE.DirectionalLight(0xffffff, 2);
@@ -55,24 +54,70 @@
 
                 const loader = new GLTFLoader().setPath( './house/' );
                 loader.load( 'scene2.glb', function ( gltf ) {
-					base = gltf.scene;
 
-                    // gltf.scene.traverse( function ( child ) {
+                    scene.add( gltf.scene );
+                    var obj = {
+						message: 'Hello World',
+						displayOutline: false,
+
+						// maxSize: 6.0,
+						speed: 5,
+
+						height: 10,
+						noiseStrength: 10.2,
+						growthSpeed: 0.2,
 
 
-                    //     if ( child.isMesh ) {
+						explode: function () {
+						alert('Bang!');
+						},
 
-                    //         // TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
-                    //         // roughnessMipmapper.generateMipmaps( child.material );
-
-                    //     }
-
-                    // } );
-
-                    scene.add( base );
-                });
+						color0: "#ffffff", 
+					};
+                    gui = new GUI();
+					
+					gui.remember(obj);
 				
+					gui.add(obj, 'message');
+					gui.add(obj, 'displayOutline');
+					gui.add(obj, 'explode');
+				
+					// gui.add(obj, 'maxSize').min(-10).max(10).step(0.25);
+					gui.add(obj, 'height').step(5); // Increment amount
+				
+				
+					// Choose from named values
+					gui.add(obj, 'speed', { Stopped: 0, Slow: 0.1, Fast: 5 } );
+				
+					var f1 = gui.addFolder('Background Colors');
+					f1.addColor(obj, 'color0').onChange(
+						function(){
+							scene.background = new THREE.Color( obj.color0 );
+						}
+					);
+					// scene.background = new THREE.Color( 'color0' );
+				
+					var f2 = gui.addFolder('Another Folder');
+					f2.add(obj, 'noiseStrength');
+				
+					var f3 = f2.addFolder('Nested Folder');
+					f3.add(obj, 'growthSpeed');
+					
+					// const colorFolder = gui.addFolder("Color");
+					// const backColorFolder = gui.addFolder("BackgroundColor");
+					// const sizeFolder = gui.addFolder("Size");
 
+                    // const parser = gltf.parser;
+                    // const variantsExtension = gltf.userData.gltfExtensions[ 'KHR_materials_variants' ];
+                    // const variants = variantsExtension.variants.map( (variant) => variant.name );
+                    // const variantsCtrl = gui.add( state, 'variant', variants ).name( 'Variants');
+
+                    // selectVariant( scene, parser, variantsExtension, state.variant );
+
+                    // variantsCtrl.onChange( (value) => selectVariant( scene, parser, variantsExtension, value));
+
+                    render();
+                });
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -95,15 +140,46 @@
 
 				window.addEventListener( 'resize', onWindowResize );
 
-				document.getElementById('action').onclick = (ev) =>{
-					scene.remove( base );
-
-					loader.load('Parrot.glb', function(gltf){
-						scene.add(gltf.scene);
-					});
-				}
+				document.body.appendChild( ARButton.createButton( renderer, { optionalFeatures: [ 'light-estimation' ] } ) );
 
 			}
+
+            function selectVariant( scene, parser, extension, variantName ){
+
+                const variantIndex = extension.variants.findeIndex( ( v ) => v.name.includes( variantNmae ) );
+
+                scene.traverse( async(object)=>{
+
+                    if ( ! object.isMesh || ! object.userData.gltfExtensions ) return;
+
+					const meshVariantDef = object.userData.gltfExtensions[ 'KHR_materials_variants' ];
+
+					if ( ! meshVariantDef ) return;
+
+					if ( ! object.userData.originalMaterial ) {
+
+						object.userData.originalMaterial = object.material;
+
+					}
+
+					const mapping = meshVariantDef.mappings
+						.find( ( mapping ) => mapping.variants.includes( variantIndex ) );
+
+					if ( mapping ) {
+
+						object.material = await parser.getDependency( 'material', mapping.material );
+						parser.assignFinalMaterial(object);
+
+					} else {
+
+						object.material = object.userData.originalMaterial;
+
+					}
+
+                    render();
+                })
+
+            }
 
 			function onWindowResize() {
 
@@ -124,7 +200,7 @@
 
 			}
 
-		</script>
 
+		</script>
 	</body>
 </html>
