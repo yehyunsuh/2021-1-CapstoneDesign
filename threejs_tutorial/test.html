@@ -8,9 +8,6 @@
 	</head>
 
 	<body>
-		<div id="info">
-			<a>Hello, World!</a>
-		</div>
 
 		<script type="module">
 
@@ -48,17 +45,20 @@
                 const light = new THREE.DirectionalLight(0xffffff, 2);
                 light.position.set(50, 50, 100);
                 scene.add(light);
-                
-                const axesHelper = new THREE.AxesHelper(1);
-                scene.add(axesHelper);
+
+				let scene_blue, scene_pink, scene_yello
 
                 const loader = new GLTFLoader().setPath( './house/' );
                 loader.load( 'blue.glb', function ( gltf ) {
 
-                    scene.add( gltf.scene );
+					scene_blue = gltf.scene;
+                    scene.add( scene_blue );
                     var obj = {
+						color0: "#ffffff",						
+						color_blue: true,
+						color_pink: false,
+						color_yellow: false,
 
-						color0: "#ffffff", 
 					};
                     gui = new GUI();
 					
@@ -70,6 +70,48 @@
 							scene.background = new THREE.Color( obj.color0 );
 						}
 					);
+
+					var f2 = gui.addFolder('상품색상');
+					
+					var color1 = f2.add(obj, 'color_blue').name('BLUE').listen().onChange(function(){setChecked("color_blue")});
+					var color2 = f2.add(obj, 'color_pink').name('PINK').listen().onChange(function(){setChecked("color_pink")});
+					var color3 = f2.add(obj, 'color_yellow').name('YELLOW').listen().onChange(function(){setChecked("color_yellow")});
+
+					function setChecked( prop ){
+						for (let param in obj){
+							obj[param] = false;
+						}
+						obj[prop] = true;
+
+						if(prop == "color_pink"){
+							scene.remove(scene_blue);
+							scene.remove(scene_yello);
+							loader.load('pink.glb', function(gltf){
+								scene_pink = gltf.scene;
+								scene.add( scene_pink );
+							})
+						}
+						else if(prop == "color_yellow"){
+							scene.remove(scene_blue);
+							scene.remove(scene_pink);
+							loader.load('yello.glb', function(gltf){
+								scene_yello = gltf.scene;
+								scene.add( scene_yello );
+							})
+						}
+						else if(prop == "color_blue"){
+							scene.remove(scene_pink);
+							scene.remove(scene_yello);
+							loader.load('blue.glb', function(gltf){
+								scene_blue = gltf.scene;
+								scene.add( scene_blue );
+							})
+						}
+					}
+
+					
+
+
 					// scene.background = new THREE.Color( 'color0' );
 				
 					
