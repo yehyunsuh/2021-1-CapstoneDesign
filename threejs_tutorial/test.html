@@ -23,8 +23,6 @@
 			let camera, scene, renderer;
             let gui;
 
-            // const state = { variant: 'midnight' };
-
 			init();
 			render();
 
@@ -49,6 +47,8 @@
 				let scene_blue, scene_pink, scene_yello
 
                 const loader = new GLTFLoader().setPath( './house/' );
+
+				// you can set basic color of interior
                 loader.load( 'blue.glb', function ( gltf ) {
 
 					scene_blue = gltf.scene;
@@ -85,6 +85,7 @@
 						}
 						obj[prop] = true;
 
+						// if you change color, new gltfloader works
 						if(prop == "color_pink"){
 							scene.remove(scene_blue);
 							scene.remove(scene_yello);
@@ -151,8 +152,6 @@
 				render();
 
 			}
-
-			//
 
 			function render() {
 
