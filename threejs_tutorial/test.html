@@ -71,6 +71,8 @@
 						}
 					);
 
+
+					// you can change colors for each interior
 					var f2 = gui.addFolder('상품색상');
 					
 					var color1 = f2.add(obj, 'color_blue').name('BLUE').listen().onChange(function(){setChecked("color_blue")});
@@ -108,6 +110,8 @@
 							})
 						}
 					}
+					f1.open()
+					f2.open()
 
 					
 
