@@ -113,25 +113,6 @@
 					f1.open()
 					f2.open()
 
-					
-
-
-					// scene.background = new THREE.Color( 'color0' );
-				
-					
-					// const colorFolder = gui.addFolder("Color");
-					// const backColorFolder = gui.addFolder("BackgroundColor");
-					// const sizeFolder = gui.addFolder("Size");
-
-                    // const parser = gltf.parser;
-                    // const variantsExtension = gltf.userData.gltfExtensions[ 'KHR_materials_variants' ];
-                    // const variants = variantsExtension.variants.map( (variant) => variant.name );
-                    // const variantsCtrl = gui.add( state, 'variant', variants ).name( 'Variants');
-
-                    // selectVariant( scene, parser, variantsExtension, state.variant );
-
-                    // variantsCtrl.onChange( (value) => selectVariant( scene, parser, variantsExtension, value));
-
                     render();
                 });
 
@@ -159,43 +140,6 @@
 				document.body.appendChild( ARButton.createButton( renderer, { optionalFeatures: [ 'light-estimation' ] } ) );
 
 			}
-
-            function selectVariant( scene, parser, extension, variantName ){
-
-                const variantIndex = extension.variants.findeIndex( ( v ) => v.name.includes( variantNmae ) );
-
-                scene.traverse( async(object)=>{
-
-                    if ( ! object.isMesh || ! object.userData.gltfExtensions ) return;
-
-					const meshVariantDef = object.userData.gltfExtensions[ 'KHR_materials_variants' ];
-
-					if ( ! meshVariantDef ) return;
-
-					if ( ! object.userData.originalMaterial ) {
-
-						object.userData.originalMaterial = object.material;
-
-					}
-
-					const mapping = meshVariantDef.mappings
-						.find( ( mapping ) => mapping.variants.includes( variantIndex ) );
-
-					if ( mapping ) {
-
-						object.material = await parser.getDependency( 'material', mapping.material );
-						parser.assignFinalMaterial(object);
-
-					} else {
-
-						object.material = object.userData.originalMaterial;
-
-					}
-
-                    render();
-                })
-
-            }
 
 			function onWindowResize() {
 
