@@ -65,7 +65,7 @@
 					gui.remember(obj);
 				
 					var f1 = gui.addFolder('배경색상');
-					f1.addColor(obj, 'color0').onChange(
+					f1.addColor(obj, 'color0').name('배경색상').onChange(
 						function(){
 							scene.background = new THREE.Color( obj.color0 );
 						}
