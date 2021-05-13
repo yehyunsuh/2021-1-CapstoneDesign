@@ -24,6 +24,7 @@
 			import { GLTFLoader } from './GLTFLoader.js';
             import { RGBELoader } from './RGBELoader.js';
 			import { ARButton } from './ARButton.js';
+			import { RoughnessMipmapper } from './RoughnessMipmapper.js';
 
 			var camera, scene, renderer, controls;
             var gui, reticle, current_object;
@@ -128,6 +129,7 @@
 								box.setFromObject(current_object);
 								box.getCenter(controls.target);
 								controls.update();
+								render();
 							})
 						}
 						else if(prop == "color_yellow"){
@@ -139,6 +141,7 @@
 								box.setFromObject(current_object);
 								box.getCenter(controls.target);
 								controls.update();
+								render();
 							})
 						}
 						else if(prop == "color_blue"){
@@ -150,6 +153,7 @@
 								box.setFromObject(current_object);
 								box.getCenter(controls.target);
 								controls.update();
+								render();
 							})
 						}
 					}
@@ -172,7 +176,6 @@
 				controls.target.set( 0, 0, 0 );
 				controls.enableDamping = true;
 				controls.dampingFactor = 0.05;
-				controls.update();
                 
                 const pmremGenerator = new THREE.PMREMGenerator( renderer );
                 pmremGenerator.compileEquirectangularShader();
@@ -184,7 +187,7 @@
 
 				options.domOverlay = { root: document.getElementById('content')};
 
-				document.body.appendChild( ARButton.createButton( renderer, { optionalFeatures: [ 'light-estimation' ] } ) );
+				document.body.appendChild( ARButton.createButton( renderer, options ) );
 
 				reticle = new THREE.Mesh(
 					new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
@@ -194,7 +197,7 @@
 				reticle.visible = false;
 				scene.add( reticle );
 
-				window.addEventListener( 'resize', onWindowResize );
+				window.addEventListener( 'resize', onWindowResize, false );
 
 				renderer.domElement.addEventListener('touchstart', function(e){
 					e.preventDefault();
