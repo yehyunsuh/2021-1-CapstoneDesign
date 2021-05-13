@@ -9,8 +9,10 @@
 	</head>
 
 	<body>
-
-		<button type="button" id="place-button">PLACE</button>
+		<div id="content">
+			<div id="container" style="position: fixed;"></div>
+			<button type="button" id="place-button">PLACE</button>
+		</div>
 
 		<script type="module">
 
@@ -52,9 +54,10 @@
 			function init() {
 
 				const container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				document.getElementById("container").appendChild(container);
 
 				scene = new THREE.Scene();
+				window.scene = scene;
 				scene.background = new THREE.Color( 0xffffff );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
