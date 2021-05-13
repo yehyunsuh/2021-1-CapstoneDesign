@@ -21,27 +21,43 @@
             import { RGBELoader } from './RGBELoader.js';
 			import { ARButton } from './ARButton.js';
 
-			let camera, scene, renderer, current_object;
-            let gui, reticle;
+			var camera, scene, renderer, controls;
+            var gui, reticle, current_object;
+			var isAR;
+
+			let hitTestSource = null;
+			let hitTestSourceRequested = false;
 
 			init();
-			render();
+			animate();
 
 			$("#ARButton").click(function(){
-				current_object.position.setFromMatrixPosition(reticle.matrix);
-				current_object.visible = true;
+				current_object.visible = false;
+				isAR = true;
 			})
+
+			$("#place-button").click(function(){
+				arPlace();
+			})
+
+			function arPlace(){
+				if (reticle.visible){
+					current_object.position.setFromMatrixPosition(reticle.matrix);
+					current_object.visible = true;
+				}
+			}
 
 			function init() {
 
 				const container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
+				scene = new THREE.Scene();
+				window.scene = scene;
+				scene.background = new THREE.Color( 0xffffff );
+
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
 				camera.position.set( 0, 0, 2.7 );
-
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0xffffff );
 
                 const ambient = new THREE.AmbientLight(0x666666);
                 scene.add(ambient);
@@ -50,14 +66,6 @@
                 light.position.set(50, 50, 100);
                 scene.add(light);
 
-				reticle = new THREE.Mesh(
-					new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
-					new THREE.MeshBasicMaterial()
-				);
-				reticle.matrixAutoUpdate = false;
-				reticle.visible = true;
-				scene.add( reticle );
-
                 const loader = new GLTFLoader().setPath( './models/' );
 
 				// you can set basic color of interior
@@ -65,6 +73,7 @@
 
 					current_object = gltf.scene;
                     scene.add( current_object );
+
                     var obj = {
 						color0: "#ffffff",						
 						color_blue: true,
@@ -72,6 +81,8 @@
 						color_yellow: false,
 
 					};
+
+					arPlace();
 					
 					var box = new THREE.Box3();
 					box.setFromObject(current_object);
@@ -148,16 +159,9 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.xr.enabled = true;
-				// renderer.toneMapping = THREE.ACESFilmicToneMapping;
-				// renderer.toneMappingExposure = 1;
-				renderer.outputEncoding = THREE.sRGBEncoding;
 				container.appendChild( renderer.domElement );
 
-                
-                const pmremGenerator = new THREE.PMREMGenerator( renderer );
-                pmremGenerator.compileEquirectangularShader();
-
-				const controls = new OrbitControls( camera, renderer.domElement );
+				controls = new OrbitControls( camera, renderer.domElement );
 				controls.addEventListener( 'change', render ); // use if there is no animation loop
 				controls.minDistance = 0.1;
 				controls.maxDistance = 10;
@@ -165,11 +169,64 @@
 				controls.enableDamping = true;
 				controls.dampingFactor = 0.05;
 				controls.update();
+                
+                const pmremGenerator = new THREE.PMREMGenerator( renderer );
+                pmremGenerator.compileEquirectangularShader();
 
-				window.addEventListener( 'resize', onWindowResize );
+				let options = {
+					requiredFeatures: ['hit-test'],
+					optionalFeatures: ['dom-overlay'],
+				}
+
+				options.domOverlay = { root: document.getElementById('content')};
 
 				document.body.appendChild( ARButton.createButton( renderer, { optionalFeatures: [ 'light-estimation' ] } ) );
 
+				reticle = new THREE.Mesh(
+					new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
+					new THREE.MeshBasicMaterial()
+				);
+				reticle.matrixAutoUpdate = false;
+				reticle.visible = false;
+				scene.add( reticle );
+
+				window.addEventListener( 'resize', onWindowResize );
+
+				renderer.domElement.addEventListener('touchstart', function(e){
+					e.preventDefault();
+					touchDown = true;
+					touchX = e.touches[0].pageX;
+					touchY = e.touches[0].pageY;
+				}, false);
+
+				renderer.domElement.addEventListener('touchend', function(e){
+					e.preventDefault();
+					touchDown = false;
+				}, false);
+
+				renderer.domElement.addEventListener('touchmove', function(e){
+					e.preventDefault();
+
+					if(!touchDown){
+						return;
+					}
+
+					deltaX = e.touches[0].pageX - touchX;
+					deltaY = e.touches[0].pageY - touchY;
+					touchX = e.touched[0].pageX;
+					touchY = e.touched[0].pageY;
+
+					rotateObject();
+				}, false);
+
+			}
+
+			var touchDown, touchX, touchY, deltaX, deltaY;
+
+			function rotateObject(){
+				if(current_object && reticle.visible){
+					current_object.rotation.y += deltaX / 100;
+				}
 			}
 
 			function onWindowResize() {
@@ -182,8 +239,62 @@
 				render();
 
 			}
+			
+			function animate() {
 
-			function render() {
+				renderer.setAnimationLoop( render );
+				requestAnimationFrame(animate);
+				controls.update();
+
+			}
+
+			function render(timestamp, frame) {
+
+				if (frame && isAR){
+					var referenceSpace = renderer.xr.getReferenceSpace();
+					var session = renderer.xr.getSession();
+
+					if(hitTestSourceRequested === false){
+						session.requestReferenceSpace('viewer').then(function(referenceSpace){
+							session.requestHitTestSource( {space: referenceSpace}).then(function(source){
+								hitTestSource = source;
+							});
+						});
+						
+						session.addEventListener('end', function(){
+							hitTestSourceRequested = false;
+							hitTestSource = null;
+
+							isAR = false;
+
+							reticle.visible = false;
+
+							var box = new THREE.Box3();
+							box.setFromObject(current_object);
+							box.center(controls.target);
+
+							document.getElementById("place-button").style.display = "none";
+						});
+
+						hitTestSourceRequested = true;
+					}
+
+					if(hitTestSource){
+						var hitTestResults = frame.getHitTestResults(hitTestSource);
+
+						if ( hitTestResults.length ){
+							var hit = hitTestResults[0];
+
+							document.getElementById("place-button").style.display = "block";
+
+							reticle.visible = true;
+							reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
+						} else {
+							reticle.visible = false;
+							document.getElementById("place-button").style.display = "none";
+						}
+					}
+				}
 
 				renderer.render( scene, camera );
 
