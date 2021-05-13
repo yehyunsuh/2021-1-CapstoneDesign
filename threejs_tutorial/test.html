@@ -26,7 +26,7 @@
 			import { ARButton } from './ARButton.js';
 			import { RoughnessMipmapper } from './RoughnessMipmapper.js';
 
-			var camera, scene, renderer, controls;
+			var container, camera, scene, renderer, controls;
             var gui, reticle, current_object;
 			var isAR;
 
@@ -54,8 +54,8 @@
 
 			function init() {
 
-				const container = document.createElement( 'div' );
-				document.getElementById("container").appendChild(container);
+				container = document.createElement( 'div' );
+				document.getElementById("container").appendChild( container );
 
 				scene = new THREE.Scene();
 				window.scene = scene;
@@ -74,10 +74,12 @@
                 const loader = new GLTFLoader().setPath( './models/' );
 
 				// you can set basic color of interior
-                loader.load( 'blue.glb', function ( gltf ) {
+                loader.load( 'blue.glb', function ( glb ) {
 
-					current_object = gltf.scene;
+					current_object = glb.scene;
                     scene.add( current_object );
+
+					arPlace();
 
                     var obj = {
 						color0: "#ffffff",						
@@ -87,8 +89,6 @@
 
 					};
 
-					arPlace();
-					
 					var box = new THREE.Box3();
 					box.setFromObject(current_object);
 					box.getCenter(controls.target);
@@ -122,8 +122,8 @@
 						// if you change color, new gltfloader works
 						if(prop == "color_pink"){
 							scene.remove(current_object);
-							loader.load('pink.glb', function(gltf){
-								current_object = gltf.scene;
+							loader.load('pink.glb', function(glb){
+								current_object = glb.scene;
 								scene.add( current_object );
 								var box = new THREE.Box3();
 								box.setFromObject(current_object);
@@ -134,8 +134,8 @@
 						}
 						else if(prop == "color_yellow"){
 							scene.remove(current_object);
-							loader.load('yello.glb', function(gltf){
-								current_object = gltf.scene;
+							loader.load('yello.glb', function(glb){
+								current_object = glb.scene;
 								scene.add( current_object );
 								var box = new THREE.Box3();
 								box.setFromObject(current_object);
@@ -146,8 +146,8 @@
 						}
 						else if(prop == "color_blue"){
 							scene.remove(current_object);
-							loader.load('blue.glb', function(gltf){
-								current_object = gltf.scene;
+							loader.load('blue.glb', function(glb){
+								current_object = glb.scene;
 								scene.add( current_object );
 								var box = new THREE.Box3();
 								box.setFromObject(current_object);
@@ -242,9 +242,6 @@
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
-
-				render();
-
 			}
 			
 			function animate() {
