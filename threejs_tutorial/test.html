@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
 
 	<body>
@@ -20,11 +21,16 @@
             import { RGBELoader } from './RGBELoader.js';
 			import { ARButton } from './ARButton.js';
 
-			let camera, scene, renderer;
-            let gui;
+			let camera, scene, renderer, current_object;
+            let gui, reticle;
 
 			init();
 			render();
+
+			$("#ARButton").click(function(){
+				current_object.position.setFromMatrixPosition(reticle.matrix);
+				current_object.visible = true;
+			})
 
 			function init() {
 
@@ -44,15 +50,21 @@
                 light.position.set(50, 50, 100);
                 scene.add(light);
 
-				let scene_blue, scene_pink, scene_yello
+				reticle = new THREE.Mesh(
+					new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
+					new THREE.MeshBasicMaterial()
+				);
+				reticle.matrixAutoUpdate = false;
+				reticle.visible = true;
+				scene.add( reticle );
 
                 const loader = new GLTFLoader().setPath( './models/' );
 
 				// you can set basic color of interior
                 loader.load( 'blue.glb', function ( gltf ) {
 
-					scene_blue = gltf.scene;
-                    scene.add( scene_blue );
+					current_object = gltf.scene;
+                    scene.add( current_object );
                     var obj = {
 						color0: "#ffffff",						
 						color_blue: true,
@@ -60,6 +72,12 @@
 						color_yellow: false,
 
 					};
+					
+					var box = new THREE.Box3();
+					box.setFromObject(current_object);
+					box.getCenter(controls.target);
+					controls.update();
+
                     gui = new GUI();
 					
 					gui.remember(obj);
@@ -87,27 +105,36 @@
 
 						// if you change color, new gltfloader works
 						if(prop == "color_pink"){
-							scene.remove(scene_blue);
-							scene.remove(scene_yello);
+							scene.remove(current_object);
 							loader.load('pink.glb', function(gltf){
-								scene_pink = gltf.scene;
-								scene.add( scene_pink );
+								current_object = gltf.scene;
+								scene.add( current_object );
+								var box = new THREE.Box3();
+								box.setFromObject(current_object);
+								box.getCenter(controls.target);
+								controls.update();
 							})
 						}
 						else if(prop == "color_yellow"){
-							scene.remove(scene_blue);
-							scene.remove(scene_pink);
+							scene.remove(current_object);
 							loader.load('yello.glb', function(gltf){
-								scene_yello = gltf.scene;
-								scene.add( scene_yello );
+								current_object = gltf.scene;
+								scene.add( current_object );
+								var box = new THREE.Box3();
+								box.setFromObject(current_object);
+								box.getCenter(controls.target);
+								controls.update();
 							})
 						}
 						else if(prop == "color_blue"){
-							scene.remove(scene_pink);
-							scene.remove(scene_yello);
+							scene.remove(current_object);
 							loader.load('blue.glb', function(gltf){
-								scene_blue = gltf.scene;
-								scene.add( scene_blue );
+								current_object = gltf.scene;
+								scene.add( current_object );
+								var box = new THREE.Box3();
+								box.setFromObject(current_object);
+								box.getCenter(controls.target);
+								controls.update();
 							})
 						}
 					}
@@ -120,6 +147,7 @@
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.xr.enabled = true;
 				// renderer.toneMapping = THREE.ACESFilmicToneMapping;
 				// renderer.toneMappingExposure = 1;
 				renderer.outputEncoding = THREE.sRGBEncoding;
@@ -134,6 +162,8 @@
 				controls.minDistance = 0.1;
 				controls.maxDistance = 10;
 				controls.target.set( 0, 0, 0 );
+				controls.enableDamping = true;
+				controls.dampingFactor = 0.05;
 				controls.update();
 
 				window.addEventListener( 'resize', onWindowResize );
