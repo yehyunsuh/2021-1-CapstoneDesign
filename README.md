@@ -7,7 +7,7 @@ In more detail, users use a web server to select furniture to suit their tastes 
 ## Getting Started 
 ### threejs_tutorial
 test.html - 3d viewer<br>
-index.html - 3d viewer
+index.html - 3d viewer<br><br>
 
 
 ## Built With 
