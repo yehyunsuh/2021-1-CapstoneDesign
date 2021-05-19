@@ -10,14 +10,14 @@ test.html - 3d viewer<br>
 index.html - 3d viewer<br><br>
 
 
-## Built With 
+## 🤝🏻Built With 
 
 * [서예현](https://github.com/justbeaver97) - 3d viewer develop / ARKit
 * [정현성](https://github.com/Gringreem) - 3d viewer develop / ARCore
 * [정지영](https://github.com/Jungjjeong) - 3d viewer develop / ARCore
 
 
-## Acknowledgments
+## 🤝🏻Acknowledgments
 
 * [HanssemLink](https://github.com/ddllttmmddwwnnAccount)
 * Dongguk UNIV Capston Design Project
