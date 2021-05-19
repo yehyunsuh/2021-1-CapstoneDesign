@@ -17,5 +17,5 @@ In more detail, users use a web server to select furniture to suit their tastes 
 
 ## Acknowledgments
 
-* HanssemLink (https://github.com/ddllttmmddwwnnAccount)
+* [HanssemLink](https://github.com/ddllttmmddwwnnAccount)
 * Dongguk UNIV Capston Design Project
