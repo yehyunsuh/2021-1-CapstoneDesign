@@ -5,14 +5,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="main.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
 
 	<body>
-		<div id="content">
-			<div id="container" style="position: fixed;"></div>
-			<button type="button" id="place-button">PLACE</button>
-		</div>
 
 		<script type="module">
 
@@ -23,41 +18,23 @@
 			import { OrbitControls } from './OrbitControls.js';
 			import { GLTFLoader } from './GLTFLoader.js';
             import { RGBELoader } from './RGBELoader.js';
-			import { RoughnessMipmapper } from './RoughnessMipmapper.js';
 
-			var container, camera, scene, renderer, controls;
-            var gui, reticle, current_object;
-			var isAR;
-
-			let hitTestSource = null;
-			let hitTestSourceRequested = false;
-
+			let camera, scene, renderer, controls;
+            let gui, current_object;
+			
 			init();
-			animate();
-
-
-			$("#place-button").click(function(){
-				arPlace();
-			})
-
-			function arPlace(){
-				if (reticle.visible){
-					current_object.position.setFromMatrixPosition(reticle.matrix);
-					current_object.visible = true;
-				}
-			}
+			render();
 
 			function init() {
 
-				container = document.createElement( 'div' );
-				document.getElementById("container").appendChild( container );
-
-				scene = new THREE.Scene();
-				window.scene = scene;
-				scene.background = new THREE.Color( 0xffffff );
+				const container = document.createElement( 'div' );
+				document.body.appendChild( container );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-				camera.position.set( 0, 0, 2.7 );
+				camera.position.set( 0, 0, 3 );
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xffffff );
 
                 const ambient = new THREE.AmbientLight(0x666666);
                 scene.add(ambient);
@@ -69,12 +46,10 @@
                 const loader = new GLTFLoader().setPath( './models/' );
 
 				// you can set basic color of interior
-                loader.load( 'blue.glb', function ( glb ) {
+                loader.load( 'blue.glb', function ( gltf ) {
 
-					current_object = glb.scene;
+					current_object = gltf.scene;
                     scene.add( current_object );
-
-					arPlace();
 
                     var obj = {
 						color0: "#ffffff",						
@@ -83,11 +58,6 @@
 						color_yellow: false,
 
 					};
-
-					var box = new THREE.Box3();
-					box.setFromObject(current_object);
-					box.getCenter(controls.target);
-					controls.update();
 
                     gui = new GUI();
 					
@@ -120,10 +90,6 @@
 							loader.load('pink.glb', function(glb){
 								current_object = glb.scene;
 								scene.add( current_object );
-								var box = new THREE.Box3();
-								box.setFromObject(current_object);
-								box.getCenter(controls.target);
-								controls.update();
 								render();
 							})
 						}
@@ -132,10 +98,6 @@
 							loader.load('yello.glb', function(glb){
 								current_object = glb.scene;
 								scene.add( current_object );
-								var box = new THREE.Box3();
-								box.setFromObject(current_object);
-								box.getCenter(controls.target);
-								controls.update();
 								render();
 							})
 						}
@@ -144,10 +106,6 @@
 							loader.load('blue.glb', function(glb){
 								current_object = glb.scene;
 								scene.add( current_object );
-								var box = new THREE.Box3();
-								box.setFromObject(current_object);
-								box.getCenter(controls.target);
-								controls.update();
 								render();
 							})
 						}
@@ -155,13 +113,13 @@
 					f1.open()
 					f2.open()
 
+
                     render();
                 });
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.xr.enabled = true;
 				container.appendChild( renderer.domElement );
 
 				controls = new OrbitControls( camera, renderer.domElement );
@@ -171,63 +129,13 @@
 				controls.target.set( 0, 0, 0 );
 				controls.enableDamping = true;
 				controls.dampingFactor = 0.05;
+				controls.update();
                 
                 const pmremGenerator = new THREE.PMREMGenerator( renderer );
                 pmremGenerator.compileEquirectangularShader();
 
-				let options = {
-					requiredFeatures: ['hit-test'],
-					optionalFeatures: ['dom-overlay'],
-				}
-
-				options.domOverlay = { root: document.getElementById('content')};
-
-
-				reticle = new THREE.Mesh(
-					new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
-					new THREE.MeshBasicMaterial()
-				);
-				reticle.matrixAutoUpdate = false;
-				reticle.visible = false;
-				scene.add( reticle );
-
 				window.addEventListener( 'resize', onWindowResize, false );
 
-				renderer.domElement.addEventListener('touchstart', function(e){
-					e.preventDefault();
-					touchDown = true;
-					touchX = e.touches[0].pageX;
-					touchY = e.touches[0].pageY;
-				}, false);
-
-				renderer.domElement.addEventListener('touchend', function(e){
-					e.preventDefault();
-					touchDown = false;
-				}, false);
-
-				renderer.domElement.addEventListener('touchmove', function(e){
-					e.preventDefault();
-
-					if(!touchDown){
-						return;
-					}
-
-					deltaX = e.touches[0].pageX - touchX;
-					deltaY = e.touches[0].pageY - touchY;
-					touchX = e.touched[0].pageX;
-					touchY = e.touched[0].pageY;
-
-					rotateObject();
-				}, false);
-
-			}
-
-			var touchDown, touchX, touchY, deltaX, deltaY;
-
-			function rotateObject(){
-				if(current_object && reticle.visible){
-					current_object.rotation.y += deltaX / 100;
-				}
 			}
 
 			function onWindowResize() {
@@ -237,62 +145,8 @@
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
-			
-			function animate() {
-
-				renderer.setAnimationLoop( render );
-				requestAnimationFrame(animate);
-				controls.update();
-
-			}
 
 			function render(timestamp, frame) {
-
-				if (frame && isAR){
-					var referenceSpace = renderer.xr.getReferenceSpace();
-					var session = renderer.xr.getSession();
-
-					if(hitTestSourceRequested === false){
-						session.requestReferenceSpace('viewer').then(function(referenceSpace){
-							session.requestHitTestSource( {space: referenceSpace}).then(function(source){
-								hitTestSource = source;
-							});
-						});
-						
-						session.addEventListener('end', function(){
-							hitTestSourceRequested = false;
-							hitTestSource = null;
-
-							isAR = false;
-
-							reticle.visible = false;
-
-							var box = new THREE.Box3();
-							box.setFromObject(current_object);
-							box.center(controls.target);
-
-							document.getElementById("place-button").style.display = "none";
-						});
-
-						hitTestSourceRequested = true;
-					}
-
-					if(hitTestSource){
-						var hitTestResults = frame.getHitTestResults(hitTestSource);
-
-						if ( hitTestResults.length ){
-							var hit = hitTestResults[0];
-
-							document.getElementById("place-button").style.display = "block";
-
-							reticle.visible = true;
-							reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
-						} else {
-							reticle.visible = false;
-							document.getElementById("place-button").style.display = "none";
-						}
-					}
-				}
 
 				renderer.render( scene, camera );
 
