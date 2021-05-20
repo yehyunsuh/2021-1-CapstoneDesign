@@ -52,12 +52,6 @@
                 loader.load( '746525_OPEN.glb', function ( gltf ) {
 
 					current_object = gltf.scene;
-					current_object.traverse( function(child){
-						if (child.isMesh){
-							child.geometry.center();
-						}
-					});
-					current_object.scale.set(100,100,100);
                     scene.add( current_object );
 
                     var obj = {
