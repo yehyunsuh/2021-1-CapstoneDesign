@@ -49,9 +49,9 @@
                 const loader = new GLTFLoader().setPath('./models/');
 
 				// you can set basic color of interior
-                loader.load( '746525_OPEN.glb', function ( gltf ) {
+                loader.load( '746525_CLOSE (1).glb', function ( glb ) {
 
-					current_object = gltf.scene;
+					current_object = glb.scene;
                     scene.add( current_object );
 
                     var obj = {
@@ -59,16 +59,8 @@
 						color_blue: true,
 						color_pink: false,
 						color_yellow: false,
-						motion_down: true,
-						motion_up:false
+						motion: false,
 					};
-
-
-
-					var box = new THREE.Box3();
-					box.setFromObject(current_object);
-					box.getCenter(controls.target);
-					controls.update();
 
                     gui = new GUI();
 					
@@ -89,11 +81,26 @@
 					var color2 = f2.add(obj, 'color_pink').name('PINK').listen().onChange(function(){setChecked("color_pink")});
 					var color3 = f2.add(obj, 'color_yellow').name('YELLOW').listen().onChange(function(){setChecked("color_yellow")});
 
-					var f3 = gui.addFolder('모션');
-					var motion1 = f3.add(obj, 'motion_down').name('Down').listen();
-					var motion2 = f3.add(obj, 'motion_up').name('UP').listem();
+					var motion_check = gui.add(obj, 'motion').name('작동').listen().onChange(function(){motionChecked()});
 
-					f3.open();
+					function motionChecked(){
+						if (obj.motion){
+							scene.remove(current_object);
+							loader.load('746525_OPEN.glb', function(glb){
+								current_object = glb.scene;
+								scene.add(current_object);
+								render();
+							})
+
+						}else{
+							scene.remove(current_object);
+							loader.load( '746525_CLOSE (1).glb', function(glb){
+								current_object = glb.scene;
+								scene.add(current_object);
+								render();
+							})
+						}
+					}
 
 					function setChecked( prop ){
 						for (let param in obj){
@@ -129,7 +136,6 @@
 					}
 					f1.open();
 					f2.open();
-					f3.open();
 
                     render();
                 });
