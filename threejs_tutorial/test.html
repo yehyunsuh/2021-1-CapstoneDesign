@@ -43,10 +43,10 @@
                 light.position.set(50, 50, 100);
                 scene.add(light);
 
-                const loader = new GLTFLoader().setPath( './models/' );
+                const loader = new GLTFLoader().setPath('./models/');
 
 				// you can set basic color of interior
-                loader.load( 'blue.glb', function ( gltf ) {
+                loader.load( '746525_OPEN.glb', function ( gltf ) {
 
 					current_object = gltf.scene;
                     scene.add( current_object );
@@ -87,7 +87,7 @@
 						// if you change color, new gltfloader works
 						if(prop == "color_pink"){
 							scene.remove(current_object);
-							loader.load('pink.glb', function(glb){
+							loader.load('746525_close.glb', function(glb){
 								current_object = glb.scene;
 								scene.add( current_object );
 								render();
