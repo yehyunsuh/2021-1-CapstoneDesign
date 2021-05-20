@@ -30,8 +30,8 @@
 				const container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-				camera.position.set( 0, 0, 3 );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 10000 );
+				camera.position.set( -400, 700, 500 );
 
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xffffff );
@@ -49,6 +49,12 @@
                 loader.load( '746525_OPEN.glb', function ( gltf ) {
 
 					current_object = gltf.scene;
+					current_object.traverse( function(child){
+						if (child.isMesh){
+							child.geometry.center();
+						}
+					});
+					current_object.scale.set(100,100,100);
                     scene.add( current_object );
 
                     var obj = {
