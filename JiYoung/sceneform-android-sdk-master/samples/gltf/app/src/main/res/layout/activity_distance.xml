@@ -1,60 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DistanceActivity">
+    tools:context=".DistanceActivity" >
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/ux_fragment"
+        android:name="com.google.ar.sceneform.ux.ArFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
-        
-        <fragment
-            android:name='com.google.ar.sceneform.ux.ArFragment'
-            android:id='@+id/sceneform_fragment'
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"/>
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/distance_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:padding="8dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Distance"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
 
-        <TableLayout
-            android:id="@+id/multiple_distance_table"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.0"/>
+    <!--    <Button-->
+    <!--        android:id="@+id/clearButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="0.5"-->
+    <!--        android:background="#18489B"-->
+    <!--        android:fontFamily="sans-serif-thin"-->
+    <!--        android:onClick="clearButton"-->
+    <!--        android:text="clear"-->
+    <!--        android:textAlignment="center"-->
+    <!--        android:textColor="@android:color/white"-->
+    <!--        android:textSize="14sp" />-->
 
-        <Spinner
-            android:id="@+id/distance_mode_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:spinnerMode="dialog" />
-
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:background="#18489B"
-            android:fontFamily="sans-serif-thin"
-            android:text="clear"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-        
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>
