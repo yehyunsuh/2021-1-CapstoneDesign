@@ -1,9 +1,0 @@
-{
-    "liveServer.settings.https": {
-    "enable": true, //set it true to enable the feature.
-    "cert": "C:/Users/sky99/Desktop/2021-1-CapstoneDesign/threejs_tutorial/serverpem/localhost.crt", //full path of the certificate
-    "key": "C:/Users/sky99/Desktop/2021-1-CapstoneDesign/threejs_tutorial/serverpem/localhost.key", //full path of the private key
-    "passphrase": "123123"
-    },
-    "liveServer.settings.port": 5579
-}
