@@ -1,0 +1,20 @@
+
+https://okky.kr/article/871911
+ios web(WKWebView)을 볼 수 있게 만들어 놓았는데 nyt, google, apple등의 사이트는 뜨는데 naver는 안 뜸
+
+https://es1015.tistory.com/368
+[iOS] WKWebView 기본 사용법 (프로젝트 내 html파일 출력)
+
+내가 최종적으로 사용한 SFSafariViewController
+https://github.com/davidrazmadzeExtra/SFSafariViewController_URL_Links
+
+scenekit을 사용한 상품 배치
+https://www.youtube.com/watch?v=9R_G0EI-UoI
+
+로봇 설치
+https://www.youtube.com/watch?v=vl5mLZWP0do
+
+RealityKit
+https://www.youtube.com/watch?v=8l3J9lwaecY
+
+keyword: realitykit
