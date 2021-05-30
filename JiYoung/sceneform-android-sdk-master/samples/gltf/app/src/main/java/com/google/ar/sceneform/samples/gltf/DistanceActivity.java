@@ -4,6 +4,7 @@ package com.google.ar.sceneform.samples.gltf;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -141,9 +142,16 @@ public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdat
             float dy = objectPose.ty() - newPose.ty();
             float dz = objectPose.tz() - newPose.tz();
 
-            ///Compute the straight-line distance.
+            ///Compute distance.
             float distanceMeters = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-            tvDistance.setText("Distance: " + distanceMeters*100 + " centimeters");
+            tvDistance.setText("측정된 길이: " + (float)Math.round(distanceMeters*100) + " cm");
+
+            Intent intent = new Intent(DistanceActivity.this, PlaceActivity.class);
+            intent.putExtra("distance", (float)Math.round(distanceMeters*100));
+
+            startActivity(intent);
+
+            finish();
 
         }
     }

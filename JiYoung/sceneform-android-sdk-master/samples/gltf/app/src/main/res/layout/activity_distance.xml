@@ -20,7 +20,7 @@
         android:background="@android:color/black"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Distance"
+        android:text="측정된 길이"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
