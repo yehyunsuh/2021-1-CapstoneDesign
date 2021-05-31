@@ -14,7 +14,7 @@
    limitations under the License.
 -->
 <resources>
-    <string name="app_name" translation_description="App Name [CHAR LIMIT=40]">Hanssem Furniture viewer</string>
+    <string name="app_name" translation_description="App Name [CHAR LIMIT=40]">Hanssem Furniture Viewer</string>
     <string name="button_AR">AR Viewer</string>
     <string name="button_Distance">3D Viewer</string>
 </resources>

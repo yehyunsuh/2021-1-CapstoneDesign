@@ -28,6 +28,11 @@
       android:id="@+id/button_distance"
       android:layout_width="99dp"
       android:layout_height="wrap_content"
-      android:text="Distance" />
+      android:layout_gravity="bottom|center"
+      android:layout_marginBottom="120sp"
+      android:fontFamily="@font/app_main_font"
+      android:background="@drawable/round_button"
+      android:gravity="center"
+      android:text="거리측정" />
 
 </FrameLayout>
