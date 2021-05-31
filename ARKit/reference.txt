@@ -5,6 +5,9 @@ ios web(WKWebView)을 볼 수 있게 만들어 놓았는데 nyt, google, apple�
 https://es1015.tistory.com/368
 [iOS] WKWebView 기본 사용법 (프로젝트 내 html파일 출력)
 
+버튼 클릭시 화면전환   
+https://twih1203.medium.com/swift-ios-%ED%99%94%EB%A9%B4%EC%A0%84%ED%99%98%ED%95%98%EA%B8%B0-5e5998679d3a    
+
 내가 최종적으로 사용한 SFSafariViewController
 https://github.com/davidrazmadzeExtra/SFSafariViewController_URL_Links
 
@@ -18,3 +21,24 @@ RealityKit
 https://www.youtube.com/watch?v=8l3J9lwaecY
 
 keyword: realitykit
+
+Navigation Controller로 전환
+https://youtu.be/LbAd2FIlnos
+
+sending data with segue
+https://roniruny.tistory.com/138
+
+changing the scale in ar anchor
+https://medium.com/macoclock/arkit-101-how-to-create-a-custom-arworldanchor-b4ac026a8964
+
+https://developer.apple.com/documentation/accelerate/working_with_matrices 
+https://medium.com/macoclock/arkit-101-how-to-create-a-custom-arworldanchor-b4ac026a8964
+https://developer.apple.com/documentation/accelerate/working_with_matrices
+
+
+alert
+https://www.youtube.com/watch?v=yVwQ7oWMxnk
+
+add image to imageviewer
+https://www.youtube.com/watch?v=Tb9J08y5a4w
+
