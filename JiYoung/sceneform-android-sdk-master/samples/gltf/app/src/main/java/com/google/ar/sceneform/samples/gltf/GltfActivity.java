@@ -67,6 +67,7 @@ public class GltfActivity extends AppCompatActivity {
     private ArFragment arFragment;
     private Renderable renderable;
 
+
     private static class AnimationInstance {
         Animator animator;
         Long startTime;
@@ -118,8 +119,8 @@ public class GltfActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
                 Intent pageIntent = new Intent(GltfActivity.this, DistanceActivity.class);
                 startActivity(pageIntent);
-                finish();
             }
+
         });
 
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
@@ -144,7 +145,7 @@ public class GltfActivity extends AppCompatActivity {
                 .exceptionally(
                         throwable -> {
                             Toast toast =
-                                    Toast.makeText(this, "Unable to load Tiger renderable", Toast.LENGTH_LONG);
+                                    Toast.makeText(this, "인테리어 파일을 불러올 수 없습니다.", Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                             return null;
@@ -181,23 +182,6 @@ public class GltfActivity extends AppCompatActivity {
                         material.setFloat4("baseColorFactor", color);
                     }
 
-//          Node tigerTitleNode = new Node();
-//          tigerTitleNode.setParent(model);
-//          tigerTitleNode.setEnabled(false);
-//          tigerTitleNode.setLocalPosition(new Vector3(0.0f, 1.0f, 0.0f));
-//          ViewRenderable.builder()
-//                  .setView(this, R.layout.tiger_card_view)
-//                  .build()
-//                  .thenAccept(
-//                          (renderable) -> {
-//                              tigerTitleNode.setRenderable(renderable);
-//                              tigerTitleNode.setEnabled(true);
-//                          })
-//                  .exceptionally(
-//                          (throwable) -> {
-//                              throw new AssertionError("Could not load card view.", throwable);
-//                          }
-//                  );
                 });
 
         arFragment

@@ -17,12 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@android:color/black"
+        android:background="#94000000"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Distance"
+        android:text="측정된 길이"
+        android:fontFamily="@font/app_main_font"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <!--    <Button-->
     <!--        android:id="@+id/clearButton"-->
