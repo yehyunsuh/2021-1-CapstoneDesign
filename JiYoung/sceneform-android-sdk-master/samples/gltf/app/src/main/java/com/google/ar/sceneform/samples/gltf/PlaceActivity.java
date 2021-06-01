@@ -129,14 +129,17 @@ public class PlaceActivity extends AppCompatActivity {
             builder.setPositiveButton("배치", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(getApplicationContext(), "배치된 상태 출력", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "배치된 상태 출력", Toast.LENGTH_SHORT).show();
                 }
             });
 
             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(getApplicationContext(), "배치 안하고 출력", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "배치 안하고 출력", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
+                    Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
+                    startActivity(pageIntent);
                 }
             });
 
@@ -231,6 +234,7 @@ public class PlaceActivity extends AppCompatActivity {
             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
                     Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
                     startActivity(pageIntent);
                 }
