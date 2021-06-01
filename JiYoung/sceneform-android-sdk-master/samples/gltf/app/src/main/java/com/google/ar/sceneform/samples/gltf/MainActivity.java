@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void onClickViewerButton(View v) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+"210.94.185.37"+":5579/threejs_tutorial/test.html"));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.hanssem.store"));
         startActivity(intent);
     }
 }
