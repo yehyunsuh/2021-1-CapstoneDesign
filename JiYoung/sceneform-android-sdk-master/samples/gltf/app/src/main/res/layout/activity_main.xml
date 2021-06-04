@@ -36,7 +36,7 @@
         android:onClick="onClickARButton"
         android:text="@string/button_AR"
         android:textColor="#505050"
-        android:textSize="15sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/button_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -52,7 +52,7 @@
         android:onClick="onClickViewerButton"
         android:text="@string/button_Distance"
         android:textColor="#4E4E4E"
-        android:textSize="15sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
