@@ -115,7 +115,8 @@ public class PlaceActivity extends AppCompatActivity {
         Float distance = (Float) intent.getSerializableExtra("distance");
 
         // 가구 길이
-        int length = (int) intent.getSerializableExtra("length");
+//        int length = (int) intent.getSerializableExtra("length");
+        int length = 180;
         TextView text_distance = (TextView) findViewById(R.id.text_distance);
 
         text_distance.setText("측정 거리: " + distance + " cm");
