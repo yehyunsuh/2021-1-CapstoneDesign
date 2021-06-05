@@ -136,8 +136,8 @@ public class GltfActivity extends AppCompatActivity {
                 .setSource(
                         this,
                         Uri.parse(
-                                newUri))
-//                                "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb"))
+//                                newUri))
+                                "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb"))
                 .setIsFilamentGltf(true)
                 .build()
                 .thenAccept(
