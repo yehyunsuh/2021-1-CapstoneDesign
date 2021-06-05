@@ -4,11 +4,13 @@ public class SampleData{
     private int image;
     private String key;
     private String fullName;
+    private int size;
 
-    public SampleData(int image, String key, String fullName){
+    public SampleData(int image, String key, String fullName, int size){
         this.image = image;
         this.key = key;
         this.fullName = fullName;
+        this.size = size;
     }
 
     public int getImage(){
@@ -22,4 +24,6 @@ public class SampleData{
     public String getFullName(){
         return this.fullName;
     }
+
+    public int getSize() { return this.size; }
 }

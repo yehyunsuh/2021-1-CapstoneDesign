@@ -40,6 +40,7 @@ public class ListARActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(ListARActivity.this, GltfActivity.class);
                 intent.putExtra("key", listadapter.getItem(position).getKey());
+                intent.putExtra("size", listadapter.getItem(position).getSize());
 
                 startActivity(intent);
 
@@ -51,27 +52,27 @@ public class ListARActivity extends AppCompatActivity {
     public void InitializeData(){
         dataList = new ArrayList<SampleData>();
 
-        dataList.add(new SampleData(R.drawable.i668317, "668317", "한샘 하이 엠마 천연가죽 3인용 소파"));
-        dataList.add(new SampleData(R.drawable.i668318, "668318", "한샘 하이 엠마 천연가죽 4인용 소파"));
-        dataList.add(new SampleData(R.drawable.i681946, "681946", "한샘 하이 모먼트 헤드무빙 천연가죽 소파 4인용"));
-        dataList.add(new SampleData(R.drawable.i681947, "681947", "한샘 하이 모먼트 헤드무빙 천연가죽 소파 3인용"));
-        dataList.add(new SampleData(R.drawable.i737686, "737686", "한샘 하이 브리오 이태리 천연가죽 4인용 소파"));
-        dataList.add(new SampleData(R.drawable.i737687, "737687", "한샘 하이 브리오 이태리 천연가죽 3.5인용 소파"));
-        dataList.add(new SampleData(R.drawable.i746525, "746525", "한샘 프라임 노블 천연면피가죽 전동 리클라이너 소파 4인용"));
-        dataList.add(new SampleData(R.drawable.i746526, "746526", "한샘 프라임 노블 천연면피가죽 전동 리클라이너 소파 3인용"));
-        dataList.add(new SampleData(R.drawable.i746540, "746540", "한샘 프라임 리츠 천연면피가죽 전동 리클라이너 소파 4인용"));
-        dataList.add(new SampleData(R.drawable.i746541, "746541", "한샘 프라임 리츠 천연면피가죽 전동 리클라이너 소파 3인용"));
-        dataList.add(new SampleData(R.drawable.i772973, "772973", "한샘 클로즈 침대 SS 슈퍼싱글 코튼그레이"));
-        dataList.add(new SampleData(R.drawable.i777039, "777039", "한샘 밀로 패브릭소파 3인용"));
-        dataList.add(new SampleData(R.drawable.i777040, "777040", "한샘 밀로 패브릭소파 4인용"));
-        dataList.add(new SampleData(R.drawable.i786840, "786840", "한샘 모아 모듈형 패브릭소파 3인용"));
-        dataList.add(new SampleData(R.drawable.i786841, "786841", "한샘 모아 모듈형 패브릭소파 3인 카우치"));
-        dataList.add(new SampleData(R.drawable.i786842, "786842", "한샘 모아 모듈형 패브릭소파 4인 오픈형"));
-        dataList.add(new SampleData(R.drawable.i787819, "787819", "한샘 듀이 아르떼 패브릭소파 4인 카우치"));
-        dataList.add(new SampleData(R.drawable.i787823, "787823", "한샘 듀이 아르떼 패브릭소파 4인용"));
-        dataList.add(new SampleData(R.drawable.i796379, "796379", "한샘 엠마 테일러 천연면피가죽 4인용 소파"));
-        dataList.add(new SampleData(R.drawable.i796416, "796416", "한샘 엠마 테일러 천연면피가죽 3인용 소파"));
-        dataList.add(new SampleData(R.drawable.i799215, "799215", "한샘 엠마 컴포트 천연면피가죽 3인용 소파"));
-        dataList.add(new SampleData(R.drawable.i799220, "799220", "한샘 엠마 컴포트 천연면피가죽 4인용 소파"));
+        dataList.add(new SampleData(R.drawable.i668317, "668317", "한샘 하이 엠마 천연가죽 3인용 소파", 211));
+        dataList.add(new SampleData(R.drawable.i668318, "668318", "한샘 하이 엠마 천연가죽 4인용 소파", 301));
+        dataList.add(new SampleData(R.drawable.i681946, "681946", "한샘 하이 모먼트 헤드무빙 천연가죽 소파 4인용", 285));
+        dataList.add(new SampleData(R.drawable.i681947, "681947", "한샘 하이 모먼트 헤드무빙 천연가죽 소파 3인용", 210));
+        dataList.add(new SampleData(R.drawable.i737686, "737686", "한샘 하이 브리오 이태리 천연가죽 4인용 소파", 285));
+        dataList.add(new SampleData(R.drawable.i737687, "737687", "한샘 하이 브리오 이태리 천연가죽 3.5인용 소파", 240));
+        dataList.add(new SampleData(R.drawable.i746525, "746525", "한샘 프라임 노블 천연면피가죽 전동 리클라이너 소파 4인용", 263));
+        dataList.add(new SampleData(R.drawable.i746526, "746526", "한샘 프라임 노블 천연면피가죽 전동 리클라이너 소파 3인용", 192));
+        dataList.add(new SampleData(R.drawable.i746540, "746540", "한샘 프라임 리츠 천연면피가죽 전동 리클라이너 소파 4인용", 263));
+        dataList.add(new SampleData(R.drawable.i746541, "746541", "한샘 프라임 리츠 천연면피가죽 전동 리클라이너 소파 3인용", 192));
+        dataList.add(new SampleData(R.drawable.i772973, "772973", "한샘 클로즈 침대 SS 슈퍼싱글 코튼그레이", 116));
+        dataList.add(new SampleData(R.drawable.i777039, "777039", "한샘 밀로 패브릭소파 3인용", 200));
+        dataList.add(new SampleData(R.drawable.i777040, "777040", "한샘 밀로 패브릭소파 4인용", 280));
+        dataList.add(new SampleData(R.drawable.i786840, "786840", "한샘 모아 모듈형 패브릭소파 3인용", 252));
+        dataList.add(new SampleData(R.drawable.i786841, "786841", "한샘 모아 모듈형 패브릭소파 3인 카우치", 252));
+        dataList.add(new SampleData(R.drawable.i786842, "786842", "한샘 모아 모듈형 패브릭소파 4인 오픈형", 280));
+        dataList.add(new SampleData(R.drawable.i787819, "787819", "한샘 듀이 아르떼 패브릭소파 4인 카우치", 301));
+        dataList.add(new SampleData(R.drawable.i787823, "787823", "한샘 듀이 아르떼 패브릭소파 4인용", 301));
+        dataList.add(new SampleData(R.drawable.i796379, "796379", "한샘 엠마 테일러 천연면피가죽 4인용 소파", 278));
+        dataList.add(new SampleData(R.drawable.i796416, "796416", "한샘 엠마 테일러 천연면피가죽 3인용 소파", 185));
+        dataList.add(new SampleData(R.drawable.i799215, "799215", "한샘 엠마 컴포트 천연면피가죽 3인용 소파", 200));
+        dataList.add(new SampleData(R.drawable.i799220, "799220", "한샘 엠마 컴포트 천연면피가죽 4인용 소파", 268));
     }
 }

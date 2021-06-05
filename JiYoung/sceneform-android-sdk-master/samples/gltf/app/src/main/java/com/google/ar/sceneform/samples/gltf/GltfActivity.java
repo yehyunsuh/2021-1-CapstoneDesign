@@ -112,19 +112,21 @@ public class GltfActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_ux);
 
+        Intent intent = getIntent();
+        String key = (String) intent.getSerializableExtra("key");
+        int length = (int) intent.getSerializableExtra("size");
+
         Button button_distance = (Button)findViewById(R.id.button_distance);
         button_distance.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
                 Intent pageIntent = new Intent(GltfActivity.this, DistanceActivity.class);
+                pageIntent.putExtra("length", length);
                 startActivity(pageIntent);
             }
 
         });
-
-        Intent intent = getIntent();
-        String key = (String) intent.getSerializableExtra("key");
 
         String newUri = "http://image.hanssem.com/hsimg/gds3d/dk/" + key + ".glb";
 

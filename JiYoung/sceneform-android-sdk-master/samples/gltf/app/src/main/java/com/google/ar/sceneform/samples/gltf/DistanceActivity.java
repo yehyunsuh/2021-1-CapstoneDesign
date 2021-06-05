@@ -133,6 +133,9 @@ public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdat
     public void onUpdate(FrameTime frameTime) {
         Frame frame = arFragment.getArSceneView().getArFrame();
 
+        Intent intent = getIntent();
+        int length = (int) intent.getSerializableExtra("length");
+
 
         if (currentAnchorNode != null && cnt == 2) {
             Pose objectPose = currentAnchor[0].getPose();
@@ -146,10 +149,11 @@ public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdat
             float distanceMeters = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
             tvDistance.setText("측정된 길이: " + (float)Math.round(distanceMeters*100) + " cm");
 
-            Intent intent = new Intent(DistanceActivity.this, PlaceActivity.class);
-            intent.putExtra("distance", (float)Math.round(distanceMeters*100));
+            Intent placeIntent = new Intent(DistanceActivity.this, PlaceActivity.class);
+            placeIntent.putExtra("distance", (float)Math.round(distanceMeters*100));
+            placeIntent.putExtra("length", length);
 
-            startActivity(intent);
+            startActivity(placeIntent);
 
             finish();
 

@@ -24,14 +24,13 @@
 
         <TextView
             android:id="@+id/fullName"
-            android:layout_width="347dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="3dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/app_main_font"
-            android:gravity="fill_vertical"
             android:text="TextView"
             android:textColor="#3E3E3E"
-            android:textSize="15sp" />
+            android:textSize="18sp"
+            android:gravity="center_vertical"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
