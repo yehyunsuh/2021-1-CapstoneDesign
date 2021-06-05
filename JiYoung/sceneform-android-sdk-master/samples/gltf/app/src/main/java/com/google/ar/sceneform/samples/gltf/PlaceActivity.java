@@ -111,7 +111,7 @@ public class PlaceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place);
 
         // 가구 길이
-        int length = 30;
+        int length = 230;
 
         Intent intent = getIntent();
         Float distance = (Float) intent.getSerializableExtra("distance");
@@ -129,17 +129,16 @@ public class PlaceActivity extends AppCompatActivity {
             builder.setPositiveButton("배치", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    // Toast.makeText(getApplicationContext(), "배치된 상태 출력", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getApplicationContext(), "배치된 상태 출력", Toast.LENGTH_SHORT).show();
                 }
             });
 
             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    // Toast.makeText(getApplicationContext(), "배치 안하고 출력", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
                     Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
                     startActivity(pageIntent);
+                //    Toast.makeText(getApplicationContext(), "배치 안하고 출력", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -229,12 +228,12 @@ public class PlaceActivity extends AppCompatActivity {
 
 
         }else{
+
             builder.setMessage("배치가 불가능합니다. 다른 장소를 선택하세요. (가구 길이: " + length + " cm)");
 
             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(getApplicationContext(),"거리 측정페이지입니다.",Toast.LENGTH_LONG).show();
                     Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
                     startActivity(pageIntent);
                 }

@@ -123,6 +123,11 @@ public class GltfActivity extends AppCompatActivity {
 
         });
 
+        Intent intent = getIntent();
+        String key = (String) intent.getSerializableExtra("key");
+
+        String newUri = "http://image.hanssem.com/hsimg/gds3d/dk/" + key + ".glb";
+
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
         WeakReference<GltfActivity> weakActivity = new WeakReference<>(this);
@@ -131,7 +136,8 @@ public class GltfActivity extends AppCompatActivity {
                 .setSource(
                         this,
                         Uri.parse(
-                                "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb"))
+                                newUri))
+//                                "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb"))
                 .setIsFilamentGltf(true)
                 .build()
                 .thenAccept(
