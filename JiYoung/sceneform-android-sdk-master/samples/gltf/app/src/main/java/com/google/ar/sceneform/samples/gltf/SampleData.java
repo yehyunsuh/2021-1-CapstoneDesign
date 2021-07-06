@@ -6,7 +6,7 @@ public class SampleData{
     private String fullName;
     private int size;
 
-    public SampleData(int image, String key, String fullName, int size){
+    public SampleData(int image, String key, String fullName, int size){ // 받은 매개변수 각각 변수에 지정
         this.image = image;
         this.key = key;
         this.fullName = fullName;
@@ -25,5 +25,5 @@ public class SampleData{
         return this.fullName;
     }
 
-    public int getSize() { return this.size; }
+    public int getSize() { return this.size; } // get method -> 출력할 때 해당 메소드를 통하여 변수값을 받아옴.
 }

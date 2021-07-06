@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.sceneform.samples.gltf;
+package com.google.ar.sceneform.samples.gltf; // Sceneform -> OpenGL 없이 ARCORE 앱 빌드해주는 3D framework
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -62,11 +62,11 @@ import java.util.Set;
 
 public class PlaceActivity extends AppCompatActivity {
 
-    private static final String TAG = PlaceActivity.class.getSimpleName();
-    private static final double MIN_OPENGL_VERSION = 3.0;
+    private static final String TAG = PlaceActivity.class.getSimpleName(); // getSimplename => package 명 포함 X name만 추출
+    private static final double MIN_OPENGL_VERSION = 3.0; // Open grapic Library version
 
-    private ArFragment arFragment;
-    private Renderable renderable;
+    private ArFragment arFragment; // ARCORE 기본 구성 사용
+    private Renderable renderable; // sceneform rendering basic class
 
 
     private static class AnimationInstance {
@@ -114,9 +114,8 @@ public class PlaceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Float distance = (Float) intent.getSerializableExtra("distance");
 
-        // 가구 길이
 //        int length = (int) intent.getSerializableExtra("length");
-        int length = 180;
+        int length = 30; // 가구 길이 임의로 지정
         TextView text_distance = (TextView) findViewById(R.id.text_distance);
 
         text_distance.setText("측정 거리: " + distance + " cm");
@@ -150,7 +149,7 @@ public class PlaceActivity extends AppCompatActivity {
 
             WeakReference<PlaceActivity> weakActivity = new WeakReference<>(this);
 
-            ModelRenderable.builder()
+            ModelRenderable.builder() // loading the glTF file and creating a source object for ModelRenderable.Builder that creates the renderable object
                     .setSource(
                             this,
                             Uri.parse(
@@ -165,7 +164,7 @@ public class PlaceActivity extends AppCompatActivity {
 
                                 }
                             })
-                    .exceptionally(
+                    .exceptionally( // exception
                             throwable -> {
                                 Toast toast =
                                         Toast.makeText(this, "인테리어 파일을 불러올 수 없습니다.", Toast.LENGTH_LONG);

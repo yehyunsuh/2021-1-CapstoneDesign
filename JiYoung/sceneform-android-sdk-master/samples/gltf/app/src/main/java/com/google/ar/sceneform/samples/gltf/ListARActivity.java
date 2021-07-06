@@ -20,27 +20,27 @@ import java.util.ArrayList;
 
 public class ListARActivity extends AppCompatActivity {
 
-    ArrayList<SampleData> dataList;
+    ArrayList<SampleData> dataList; // 실제로 list 내 데이터를 저장하게 될 type이 SampleData인 ArrayList 객체 생성
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_aractivity);
+        setContentView(R.layout.activity_list_aractivity);// 레이아웃 정의한 레이아웃 리소스를 사용하여 현재 액티비티의 화면 구성
 
-        this.InitializeData();
+        this.InitializeData(); // Initialize
 
-        ListView listView = (ListView) findViewById(R.id.listview);
-        final ListAdapter listadapter = new ListAdapter(this, dataList);
+        ListView listView = (ListView) findViewById(R.id.listview); // 레이아웃 파일에 정의된 listview
+        final ListAdapter listadapter = new ListAdapter(this, dataList); // adapter
 
-        listView.setAdapter(listadapter);
+        listView.setAdapter(listadapter); // listview 객체에 adapter객체 연결
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long l) {
 
-                Intent intent = new Intent(ListARActivity.this, GltfActivity.class);
+                Intent intent = new Intent(ListARActivity.this, GltfActivity.class); // ListARActivity -> GltfActivity data 이동
                 intent.putExtra("key", listadapter.getItem(position).getKey());
-                intent.putExtra("size", listadapter.getItem(position).getSize());
+                intent.putExtra("size", listadapter.getItem(position).getSize()); // 상품의 key, size 전달
 
                 startActivity(intent);
 

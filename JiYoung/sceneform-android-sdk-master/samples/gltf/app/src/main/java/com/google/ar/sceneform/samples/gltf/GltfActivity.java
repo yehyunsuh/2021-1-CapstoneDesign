@@ -108,13 +108,14 @@ public class GltfActivity extends AppCompatActivity {
 
         if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
-        }
+        } // 지원하는 OpenGL 버전(3.0)이 적합한지, android sdk 버전이 맞는지 확인
 
         setContentView(R.layout.activity_ux);
 
+        // -----
         Intent intent = getIntent();
         String key = (String) intent.getSerializableExtra("key");
-        int length = (int) intent.getSerializableExtra("size");
+        int length = (int) intent.getSerializableExtra("size"); // get items
 
         Button button_distance = (Button)findViewById(R.id.button_distance);
         button_distance.setOnClickListener(new View.OnClickListener(){
@@ -127,6 +128,8 @@ public class GltfActivity extends AppCompatActivity {
             }
 
         });
+        // -----
+
 
         String newUri = "http://image.hanssem.com/hsimg/gds3d/dk/" + key + ".glb";
 

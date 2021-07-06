@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     Button button_list;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { // basic app start logic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -31,3 +31,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+

@@ -14,7 +14,7 @@ import com.google.ar.sceneform.samples.gltf.SampleData;
 import java.util.ArrayList;
 
 
-public class ListAdapter extends BaseAdapter {
+public class ListAdapter extends BaseAdapter { // ListAdapter for using Listview
 
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
@@ -23,7 +23,7 @@ public class ListAdapter extends BaseAdapter {
     public ListAdapter(Context context, ArrayList<SampleData> data){
         mContext = context;
         sample = data;
-        mLayoutInflater = LayoutInflater.from(mContext);
+        mLayoutInflater = LayoutInflater.from(mContext); // Layout xml 파일을 for_listView 객체로 인스턴스화
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
-    }
+    } // position : index of the item whose view we want
 
     @Override
     public SampleData getItem(int position){
