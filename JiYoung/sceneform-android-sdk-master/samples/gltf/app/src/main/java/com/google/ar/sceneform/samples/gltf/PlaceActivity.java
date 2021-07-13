@@ -1,3 +1,5 @@
+// 거리만큼 배치해주는 페이지
+
 /*
  * Copyright 2018 Google LLC. All Rights Reserved.
  *
@@ -66,11 +68,11 @@ public class PlaceActivity extends AppCompatActivity {
     private static final double MIN_OPENGL_VERSION = 3.0; // Open grapic Library version
 
     private ArFragment arFragment; // ARCORE 기본 구성 사용
-    private Renderable renderable; // sceneform rendering basic class
+    private Renderable renderable; // sceneform rendering basic class -> rendering 가능한 3D model 생성
 
 
-    private static class AnimationInstance {
-        Animator animator;
+    private static class AnimationInstance { // animation을 만들기 위해 사용되는 데이터들 -> Filament 기능
+        Animator animator; // updating matrices in filament / updating bone matrices in filament -> gltf animation
         Long startTime;
         float duration;
         int index;
@@ -78,7 +80,7 @@ public class PlaceActivity extends AppCompatActivity {
         AnimationInstance(Animator animator, int index, Long startTime) {
             this.animator = animator;
             this.startTime = startTime;
-            this.duration = animator.getAnimationDuration(index);
+            this.duration = animator.getAnimationDuration(index); // Returns the duration of the specified glTF animation in seconds / index : animation index
             this.index = index;
         }
 
@@ -86,7 +88,7 @@ public class PlaceActivity extends AppCompatActivity {
         }
     }
 
-    private final Set<AnimationInstance> animators = new ArraySet<>();
+    private final Set<AnimationInstance> animators = new ArraySet<>(); // animationInstance 저장하기 위해 ArraySet 생성
 
     private final List<Color> colors =
             Arrays.asList(
@@ -98,24 +100,25 @@ public class PlaceActivity extends AppCompatActivity {
                     new Color(0, 1, 1, 1),
                     new Color(1, 0, 1, 1),
                     new Color(1, 1, 1, 1));
-    private int nextColor = 0;
+    private int nextColor = 0; // basic color
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIsSupportedDeviceOrFinish(this)) {
+        if (!checkIsSupportedDeviceOrFinish(this)) { // requirements check
             return;
         }
-        setContentView(R.layout.activity_place);
+        setContentView(R.layout.activity_place); // activity_place.xml
 
 
         Intent intent = getIntent();
         Float distance = (Float) intent.getSerializableExtra("distance");
+//        int length = (int) intent.getSerializableExtra("length"); // get length, distance
 
-//        int length = (int) intent.getSerializableExtra("length");
-        int length = 30; // 가구 길이 임의로 지정
+
+        int length = 30; // 가구 길이 임의로 지정 for testing
         TextView text_distance = (TextView) findViewById(R.id.text_distance);
 
         text_distance.setText("측정 거리: " + distance + " cm");
@@ -123,7 +126,7 @@ public class PlaceActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        if(length <= distance){
+        if (length <= distance){ // 배치모드
             builder.setMessage("배치가 가능합니다");
 
             builder.setPositiveButton("배치", new DialogInterface.OnClickListener() {
@@ -136,7 +139,7 @@ public class PlaceActivity extends AppCompatActivity {
             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
+                    Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class); // 거리 재측정 -> DistanceActivity
                     startActivity(pageIntent);
                 //    Toast.makeText(getApplicationContext(), "배치 안하고 출력", Toast.LENGTH_SHORT).show();
                 }
@@ -145,16 +148,16 @@ public class PlaceActivity extends AppCompatActivity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
-            arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+            arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment); // ux_fragment -> fragment manager 불러옴 -> ARFragment
 
-            WeakReference<PlaceActivity> weakActivity = new WeakReference<>(this);
+            WeakReference<PlaceActivity> weakActivity = new WeakReference<>(this); // Weakreference -> MemoryLeak X
 
-            ModelRenderable.builder() // loading the glTF file and creating a source object for ModelRenderable.Builder that creates the renderable object
+            ModelRenderable.builder() // Sceneform rendering engine
                     .setSource(
                             this,
                             Uri.parse(
-                                    "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb"))
-                    .setIsFilamentGltf(true)
+                                    "https://raw.githubusercontent.com/justbeaver97/2021-1-CapstoneDesign/master/threejs_tutorial/models/746525_close.glb")) // our .glb model
+                    .setIsFilamentGltf(true) // gltf load
                     .build()
                     .thenAccept(
                             modelRenderable -> {
@@ -173,36 +176,39 @@ public class PlaceActivity extends AppCompatActivity {
                                 return null;
                             });
 
-            arFragment.setOnTapArPlaneListener(
+            arFragment.setOnTapArPlaneListener( // Plane의 white dot tap하면 function 실행 -> hitresult(x,y), plane, motionEvent -> Anchor 생성 가능
                     (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
                         if (renderable == null) {
                             return;
                         }
 
                         // Create the Anchor.
-                        Anchor anchor = hitResult.createAnchor();
-                        AnchorNode anchorNode = new AnchorNode(anchor);
+                        Anchor anchor = hitResult.createAnchor(); // plane tap시 hitresult 에서 anchor 생성
+                        AnchorNode anchorNode = new AnchorNode(anchor); // 공간에 anchor을 기반으로 자동으로 배치되는 Node(Node : 하나의 오브젝트가 차지하는 영역)
                         anchorNode.setParent(arFragment.getArSceneView().getScene());
+                        // (getScene : 장면 반환 / getArSceneView : 장면 랜더링(arsceneview) 반환) -> parentNode로 set
 
                         // Create the transformable model and add it to the anchor.
-                        TransformableNode model = new TransformableNode(arFragment.getTransformationSystem());
-                        model.setRenderable(renderable);
+                        TransformableNode model = new TransformableNode(arFragment.getTransformationSystem()); // TransformableNode -> 선택, 변환, 회전, 크기 조정 가능한 Node
+                        model.setRenderable(renderable); // set rendering model
 
-                        float wantScale = 0.00007f * distance;
+                        float wantScale = 0.00007f * distance; // distance만큼 Scale값 조정
                         model.getScaleController().setMaxScale(wantScale);
                         model.getScaleController().setMinScale(wantScale/100 *99);
                         model.getRotationController().setEnabled(false);
-                        model.getTranslationController().setEnabled(false);
+                        model.getTranslationController().setEnabled(false); // 회전, 조작 false
                         model.setParent(anchorNode);
                         model.select();
 
-                        FilamentAsset filamentAsset = model.getRenderableInstance().getFilamentAsset();
-                        if (filamentAsset.getAnimator().getAnimationCount() > 0) {
-                            animators.add(new PlaceActivity.AnimationInstance(filamentAsset.getAnimator(), 0, System.nanoTime()));
+
+                        // Filament -> android, iOS 등 WebGL을 위한 실시간 Rendering engine
+                        FilamentAsset filamentAsset = model.getRenderableInstance().getFilamentAsset(); // filamentAsset = filament에서 사용할 3D 모델(.glb file) 정의
+                        if (filamentAsset.getAnimator().getAnimationCount() > 0) { // if animation exists
+                            animators.add(new PlaceActivity.AnimationInstance(filamentAsset.getAnimator(), 0, System.nanoTime())); // Array set animators -> add Instance
                         }
 
-                        Color color = colors.get(nextColor);
-                        nextColor++;
+                        Color color = colors.get(nextColor); // basic color setting
+                        nextColor++; // color index
                         for (int i = 0; i < renderable.getSubmeshCount(); ++i) {
                             Material material = renderable.getMaterial(i);
                             material.setFloat4("baseColorFactor", color);
@@ -213,28 +219,28 @@ public class PlaceActivity extends AppCompatActivity {
             arFragment
                     .getArSceneView()
                     .getScene()
-                    .addOnUpdateListener(
+                    .addOnUpdateListener( // Scene이 update되기 직전 frame 당 한번 호출될 콜백함수
                             frameTime -> {
                                 Long time = System.nanoTime();
-                                for (PlaceActivity.AnimationInstance animator : animators) {
-                                    animator.animator.applyAnimation(
+                                for (PlaceActivity.AnimationInstance animator : animators) { //for문 -> animators
+                                    animator.animator.applyAnimation( // 주어진 animator에 rotation, translation and scale to entities
                                             animator.index,
                                             (float) ((time - animator.startTime) / (double) SECONDS.toNanos(1))
                                                     % animator.duration);
-                                    animator.animator.updateBoneMatrices();
+                                    animator.animator.updateBoneMatrices(); //Computes root-to-node transforms for all bone nodes, then passes
                                 }
                             });
 
 
 
-        }else{
-
+        }else{ // 배치 불가
             builder.setMessage("배치가 불가능합니다. 다른 장소를 선택하세요. (가구 길이: " + length + " cm)");
 
             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent pageIntent = new Intent(PlaceActivity.this, DistanceActivity.class);
+                    // error -> 앱 중단 문제 , 재 측정 불가
                     startActivity(pageIntent);
                 }
             });
@@ -249,7 +255,7 @@ public class PlaceActivity extends AppCompatActivity {
 
     }
 
-    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) { // requirements check
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             Log.e(TAG, "Sceneform requires Android N or later");
             Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();

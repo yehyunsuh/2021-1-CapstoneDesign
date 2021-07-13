@@ -1,3 +1,5 @@
+// AR furniture List
+
 package com.google.ar.sceneform.samples.gltf;
 
 import android.content.Context;
@@ -30,11 +32,11 @@ public class ListARActivity extends AppCompatActivity {
         this.InitializeData(); // Initialize
 
         ListView listView = (ListView) findViewById(R.id.listview); // 레이아웃 파일에 정의된 listview
-        final ListAdapter listadapter = new ListAdapter(this, dataList); // adapter
+        final ListAdapter listadapter = new ListAdapter(this, dataList); // ListAdapter extends BasicAdapter -> ListAdapter.java
 
-        listView.setAdapter(listadapter); // listview 객체에 adapter객체 연결
+        listView.setAdapter(listadapter); // listview 객체에 Listadapter 객체 연결
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // Click Item
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long l) {
 

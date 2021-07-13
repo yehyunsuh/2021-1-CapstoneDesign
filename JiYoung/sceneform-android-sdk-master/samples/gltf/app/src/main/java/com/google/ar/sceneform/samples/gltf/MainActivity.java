@@ -22,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
         button_list = (Button)findViewById(R.id.button_list);
     }
     public void onClickARButton(View v) {
-        Intent intent = new Intent(getApplicationContext(),ListARActivity.class);
+        Intent intent = new Intent(getApplicationContext(),ListARActivity.class); // AR LIST
         startActivity(intent);
     }
     public void onClickViewerButton(View v) {
-        Intent intent = new Intent(getApplicationContext(),List3dActivity.class);
+        Intent intent = new Intent(getApplicationContext(),List3dActivity.class); // 3D LIST
 //        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.hanssem.store/"));
         startActivity(intent);
     }

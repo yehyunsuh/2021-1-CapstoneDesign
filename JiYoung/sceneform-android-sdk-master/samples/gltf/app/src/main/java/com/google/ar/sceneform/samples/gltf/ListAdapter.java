@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class ListAdapter extends BaseAdapter { // ListAdapter for using Listview
 
     Context mContext = null;
-    LayoutInflater mLayoutInflater = null;
+    LayoutInflater mLayoutInflater = null; // 다른 클래스에서 xml가져오기
     ArrayList<SampleData> sample;
 
     public ListAdapter(Context context, ArrayList<SampleData> data){
@@ -29,17 +29,17 @@ public class ListAdapter extends BaseAdapter { // ListAdapter for using Listview
     @Override
     public int getCount() {
         return sample.size();
-    }
+    } // get list item count
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position) { // get current item position
         return position;
-    } // position : index of the item whose view we want
+    }
 
     @Override
     public SampleData getItem(int position){
         return sample.get(position);
-    }
+    } // get item
 
     @Override
     public View getView(int position, View converView, ViewGroup parent) {

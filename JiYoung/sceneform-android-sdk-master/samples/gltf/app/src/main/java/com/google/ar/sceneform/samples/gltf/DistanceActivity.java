@@ -1,3 +1,5 @@
+// 거리측정 페이지
+
 package com.google.ar.sceneform.samples.gltf;
 
 
@@ -29,63 +31,61 @@ import java.util.Objects;
 
 public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdateListener {
 
-
     private static final double MIN_OPENGL_VERSION = 3.0;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private ArFragment arFragment;
-    private Anchor[] currentAnchor = new Anchor[2];
+    private Anchor[] currentAnchor = new Anchor[2]; // anchor array
     private AnchorNode[] currentAnchorNode = new AnchorNode[2];
-    private TextView tvDistance;
-    ModelRenderable cubeRenderable;
-    public static int cnt = 0;
+    // anchorNode 배열 선언 (Node : 하나의 object가 차지하는 영역, 즉 anchorNode는 하나의 anchor object가 차지하는 영역)
+    private TextView tvDistance; // Distance 보여주는 textview
+    ModelRenderable cubeRenderable; // sceneform renderable
+    public static int cnt = 0; // count anchor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIsSupportedDeviceOrFinish(this)) {
+        if (!checkIsSupportedDeviceOrFinish(this)) { // requirements check
             Toast.makeText(getApplicationContext(), "Device not supported", Toast.LENGTH_LONG).show();
         }
 
-        setContentView(R.layout.activity_distance);
+        setContentView(R.layout.activity_distance); // activity_distance.xml
 
-        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-        tvDistance = findViewById(R.id.tvDistance);
+        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment); // ux_fragment.xml -> fragment manager -> arfragment
+        tvDistance = findViewById(R.id.tvDistance); // Distance Textview
 
 
         initModel();
 
-        arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
+        arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> { // Plane의 white dot tap하면 function 실행
             if (cubeRenderable == null)
                 return;
 
 
-            // Creating Anchor.
+            // Creating Anchor (Anchor : fixed location and orientation in real world -> rendering 3D model in Anchor)
             Anchor anchor = hitResult.createAnchor();
             AnchorNode anchorNode = new AnchorNode(anchor);
-            anchorNode.setParent(arFragment.getArSceneView().getScene());
+            anchorNode.setParent(arFragment.getArSceneView().getScene()); // anchorNode Parrent -> Scene (plane)
 
-            clearAnchor();
+            clearAnchor(); // function -> cnt == 2일경우 initialize
 
             currentAnchor[cnt] = anchor;
-            currentAnchorNode[cnt] = anchorNode;
+            currentAnchorNode[cnt] = anchorNode; // anchor 생성마다 array 할당
 
-            cnt++;
+            cnt++; // anchor count ++
 
-            TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
-            node.setRenderable(cubeRenderable);
-            node.setParent(anchorNode);
+            TransformableNode node = new TransformableNode(arFragment.getTransformationSystem()); // 확대, 축소, 변형 Node
+            node.setRenderable(cubeRenderable); // set renderable
+            node.setParent(anchorNode); // node Parrent -> anchornode
             arFragment.getArSceneView().getScene().addOnUpdateListener(this);
             arFragment.getArSceneView().getScene().addChild(anchorNode);
             node.select();
-
-
         });
 
     }
 
-    public boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+    public boolean checkIsSupportedDeviceOrFinish(final Activity activity) { // requirements checked
 
         String openGlVersionString =
                 ((ActivityManager) Objects.requireNonNull(activity.getSystemService(Context.ACTIVITY_SERVICE)))
@@ -112,9 +112,8 @@ public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdat
                         });
     }
 
-    private void clearAnchor() {
-
-        if(cnt == 2){
+    private void clearAnchor() { // clear Anchor
+        if(cnt == 2){ // tap hitresult가 2개 초과일 수 없음
             for(int i=0; i<2; i++){
                 currentAnchor[i] = null;
                 if (currentAnchorNode[i] != null) {
@@ -124,34 +123,34 @@ public class DistanceActivity extends AppCompatActivity implements Scene.OnUpdat
                     currentAnchorNode = null;
                 }
             }
-            cnt = 0;
+            cnt = 0; // cnt, currentAnchor, currentAnchorNode initialize
         }
     }
 
 
     @Override
-    public void onUpdate(FrameTime frameTime) {
+    public void onUpdate(FrameTime frameTime) { // scene이 update 되기 전 frame당 한번씩 호출
         Frame frame = arFragment.getArSceneView().getArFrame();
 
         Intent intent = getIntent();
-        int length = (int) intent.getSerializableExtra("length");
+        int length = (int) intent.getSerializableExtra("length"); //  get length
 
 
         if (currentAnchorNode != null && cnt == 2) {
             Pose objectPose = currentAnchor[0].getPose();
-            Pose newPose = currentAnchor[1].getPose();
+            Pose newPose = currentAnchor[1].getPose(); // get each 2 anchors pose
 
             float dx = objectPose.tx() - newPose.tx();
             float dy = objectPose.ty() - newPose.ty();
-            float dz = objectPose.tz() - newPose.tz();
+            float dz = objectPose.tz() - newPose.tz(); // current x,y,z pose distance
 
             ///Compute distance.
-            float distanceMeters = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+            float distanceMeters = (float) Math.sqrt(dx * dx + dy * dy + dz * dz); // distance
             tvDistance.setText("측정된 길이: " + (float)Math.round(distanceMeters*100) + " cm");
 
-            Intent placeIntent = new Intent(DistanceActivity.this, PlaceActivity.class);
-            placeIntent.putExtra("distance", (float)Math.round(distanceMeters*100));
-            placeIntent.putExtra("length", length);
+            Intent placeIntent = new Intent(DistanceActivity.this, PlaceActivity.class); // Intent -> PlaceActivity
+            placeIntent.putExtra("distance", (float)Math.round(distanceMeters*100)); // distance
+            placeIntent.putExtra("length", length); // furniture length
 
             startActivity(placeIntent);
 
