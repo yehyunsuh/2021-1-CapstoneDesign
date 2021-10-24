@@ -20,7 +20,7 @@ In more detail, users use a web server to select furniture to suit their tastes 
 
 ## Getting Started 
 ### ● 3D Viewer
-3DViewer/test.html<br>
+3DViewer/3DViewer.html<br>
 <img src="https://user-images.githubusercontent.com/73840274/136493333-72405903-b3c7-49d2-bd71-2d357ece02ba.png" height="400"/>
 <img src="https://user-images.githubusercontent.com/73840274/136493365-498f1119-68a5-4fee-a0d0-0ea3c42ec4df.png" height="400"/>
 <br>
