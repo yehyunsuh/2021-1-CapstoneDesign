@@ -20,12 +20,12 @@ In more detail, users use a web server to select furniture to suit their tastes 
 
 ## Getting Started 
 ### ● 3D Viewer
-threejs_tutorial/test.html<br>
+3DViewer/test.html<br>
 <img src="https://user-images.githubusercontent.com/73840274/136493333-72405903-b3c7-49d2-bd71-2d357ece02ba.png" height="400"/>
 <img src="https://user-images.githubusercontent.com/73840274/136493365-498f1119-68a5-4fee-a0d0-0ea3c42ec4df.png" height="400"/>
 <br>
 
-### ● Android AR Viewer
+### ● Android AR Viewer/AR Ruler
 JiYoung/sceneform-android-sdk-master<br>
 <img src="https://user-images.githubusercontent.com/73840274/136493403-86ba49c3-d179-4182-8277-05ccdc4dbcc7.png" height="400"/>
 <img src="https://user-images.githubusercontent.com/73840274/136493417-79e5bdd0-1c53-403f-a17d-dac641d1f739.png" height="400"/>
@@ -33,8 +33,8 @@ JiYoung/sceneform-android-sdk-master<br>
 <img src="https://user-images.githubusercontent.com/73840274/136493519-f4ed647d-ccb1-4255-be9a-37f65e96e2a5.png" height="400"/>
 <br>
 
-### ● iOS AR Viewer
-ARKit_App/ARkit_App<br>
+### ● iOS AR Viewer/AR Ruler
+iOS_Application/ARKit_App<br>
 <img src="https://user-images.githubusercontent.com/73840274/136493607-359ad396-f351-4cec-903d-f38f079bb2fa.png" height="400"/>
 <img src="https://user-images.githubusercontent.com/73840274/136493571-a17895f5-fc4c-474a-8853-e42553cc648f.png" height="400"/>
 <img src="https://user-images.githubusercontent.com/73840274/136493624-24f39115-51ae-4ef0-8cee-117d510f801f.png" height="400"/>
