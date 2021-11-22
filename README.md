@@ -5,8 +5,11 @@ This project is about simulation methods that allow us to virtually place furnit
 In more detail, users use a web server to select furniture to suit their tastes and to place it in the interior space where they are located, and to simulate furniture selection and layout online.<br><br>
 
 ## 🏆 수상 내역(Award)
-2021 1학기 캡스톤 디자인 우수상
+2021년 1학기 캡스톤디자인 우수상
 <br>(2nd place in Graduation Project Competition, Dongguk University, 2021)
+<br>2021년 여름학기 캡스톤디자인 밸류업 프로그램 우수상
+<br>(3rd place in Summer Dongguk Capstone ValueUp Program, Dongguk University, 2021)
+
 
 # <img src="https://kuku-keke.com/wp-content/uploads/2020/05/2707_4.png" height="40"/>: Project
 
