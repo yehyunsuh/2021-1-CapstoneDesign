@@ -50,7 +50,7 @@ iOS_Application/ARKit_App<br>
 
 ## 🤝🏻Built With 
 
-* [서예현](https://github.com/justbeaver97) - 3d viewer develop / ARKit
+* [서예현](https://github.com/yehyunsuh) - 3d viewer develop / ARKit
 * [정현성](https://github.com/Gringreem) - 3d viewer develop / ARCore
 * [정지영](https://github.com/Jungjjeong) - 3d viewer develop / ARCore
 
